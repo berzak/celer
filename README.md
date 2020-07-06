@@ -1,9 +1,8 @@
-# CELER: Corpus of English Learner Eye Movements in Reading
+# CELER: Corpus of English Learner Eye-Movements in Reading
 
 Eye movement recordings of ESL and native English speakers reading Wall Street Journal (WSJ) newswire sentences in English. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant. The dataset has two versions v1 (182 participants) and v2 (365 participants).
 
 ### Example
-#TODO: replace with full trial.
 
 ![](full_trial.gif)
 
@@ -24,7 +23,7 @@ Eye movement recordings of ESL and native English speakers reading Wall Street J
 The eyetracking data is not made directly available due to licensing restictions of the Penn Treebank (PTB) and the BLLIP datasets from which the reading materials are drawn. In order to obtain the data with the underlying texts please follow these instructions (require Python 3).
 
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
-2. Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ..."), and `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/`
+2. Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`, and `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
 3. Run `python obtain_data.py`. This will download the a zipped folder with the data.
 
 <a name="statistics">

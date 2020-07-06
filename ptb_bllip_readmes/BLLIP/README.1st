@@ -1,0 +1,59 @@
+
+File:  README.1st
+-----------------
+
+BLLIP 1987-89 WSJ Corpus Release 1
+
+Created by:
+
+	Brown Laboratory for Linguistic Information Processing
+
+	Eugene Charniak
+	Don Blaheta
+	Niyu Ge
+	Keith Hall
+	Mark Johnson
+
+Produced by:
+
+	Linguistic Data Consortium
+
+
+This corpus contains Treebank-style, machine-parsed Wall Street Journal
+material from the ACL/DCI corpus, in a two CD-ROM set.  For more
+information on the content of the corpus, see README.2nd in the doc/
+directory on either CD.
+
+Each CD contains the same documentation, comprised of this readme, and a
+doc/ directory.  There are three data directories, 1987/, 1988/, and 1989/,
+containing the data from the given years; 1987/ appears on the first CD,
+1988/ and 1989/ appear on the second.
+
+The doc/ directories contain the following:
+
+README.2nd
+acldocno.tbl
+gramfun.ps
+gramfun.pdf
+npcoref.ps
+npcoref.pdf
+parser.ps
+parser.pdf
+procoref.ps
+procoref.pdf
+
+The postscript files are papers describing the processes used in creating
+the corpus.  README.2nd is the readme provided by the BLLIP, which contains
+information about the corpus, including marking conventions of the data.
+acldocno.tbl is a two column file mapping BLLIP filenames to ACL/DCI
+docno's.
+
+Treebank and ACL/DCI are corpora also available from the LDC.
+
+See www.ldc.upenn.edu for more information.
+
+
+Copyright (c) Wall Street Journal
+Copyright (c) Brown University
+
+

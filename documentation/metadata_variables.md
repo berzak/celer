@@ -3,14 +3,14 @@
 `participant_metadata/metadata.tsv` 
 
 - `List` Experimental list.
-- `Data Version` Dataset version in which the participants was first included.
+- `Dataset Version` Dataset version in which the participants was first included.
 - `Dominant Eye` The dominant eye of the participant. In the large majority of cases this is also the tracked eye.
 - `Program` DataViewer program folder. 
 - `L1` Native language.
 - `Age` Age.
 - `Gender` Gender: male / female / other.
 - `Education` Level of education: primary / secondary / university.
-- `Age Learned English` Age at which the participant started learning English.
+- `English AoA` English Age of Acquisition. The age at which the participant started learning English.
 - `English Speaking Countries` English speaking countries in which the participant lived, and for how long.
 - `Languages` Languages spoken other than English.   
   - `Language` Language name.

@@ -32,12 +32,12 @@ The eyetracking data is not made directly available due to licensing restictions
 
 </a>
 
-|         |Participants |       | Words (individual)| |
-| ---     | ---         | ---   | ---   | ---       |
-|         | v1          | v2    |   v1  | v2        |
-| Native  | 37          | 69    |       |           |
-| ESL     | 145         | 296   |       |           |
-| Total   | 182         | 365   |       |           |
+|         |v1            |          |          | v2           |           |        |
+| ---     | ---          | ---      | ---      | ---          | ---       | ---    |
+|         | Participants | Sentences| Words    | Participants | Sentences | Words  |
+| Native  | 37           |  2,964   |   33,519 |  69          | 5,460     | 61,272 |
+| ESL     | 145          |  11,388  |  129,892 |  296         | 23,166    | 260,888|
+| Total   | 182          |  14,274  | 162,511  |  365         | 28,548    | 321,260 |
 
 <a name="files">
 

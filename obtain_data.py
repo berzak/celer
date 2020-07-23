@@ -21,9 +21,11 @@ def check_readme():
             "Please download the dataset from", NEWS_DATASETS[dataset]['url'], "and copy this file to the", NEWS_READMES_DIR+'/'+dataset, "directory")
     return codes.values()
 
-def obtain_data(url):
+def obtain_data(data_file, codes):
+    url = "https://people.csail.mit.edu/berzak/"+str(sum(codes))+"/celer/"+data_file
+    print("Downloading", data_file, "(this may take several minutes)...")
     try:
-        urllib.request.urlretrieve(url)
+        urllib.request.urlretrieve(url, data_file)
         print("Done!")
     except IOError:
         print("Error: Failed obtaining the data from the specified url")
@@ -33,9 +35,7 @@ def main(release):
     if all(codes):
         print("Found README files for PTB-WSJ and BLLIP.")
         data_file = 'data_'+release+'.zip'
-        url = "https://people.csail.mit.edu/berzak/"+str(sum(codes))+"/celer/"+data_file
-        print("Downloading", data_file, "(this may take several minutes)...")
-        obtain_data(url)
+        obtain_data(data_file, codes)
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

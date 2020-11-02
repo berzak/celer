@@ -1,4 +1,4 @@
-# CELER: Corpus of English Learner Eye-Movements in Reading
+# CELER: Corpus of English Learner and Native Eye-Movements in Reading
 
 Eye movement recordings of ESL and native English speakers reading Wall Street Journal (WSJ) newswire sentences in English. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant. The dataset has two versions v1 (182 participants) and v2 (365 participants).
 

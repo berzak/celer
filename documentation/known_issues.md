@@ -1,7 +1,7 @@
 **`participant_metadata/`**
 
 - `metadata.tsv` Several missing values for Gender and Age.
-- `test_scores/michigan/item-scores-MichiganLG` 5 missing values for MichiganLG answers (these are counted as incorrect answers). These occured at an early stage of the experiment when it was possible to submit the test without answering all the questions.
+- `test_scores/michigan/item-scores-MichiganLG` 5 missing values for MichiganLG answers (counted as incorrect answers). These occured at an early stage of the experiment when it was possible to submit the test without answering all the questions.
 
 **`data_[version]`**
 
@@ -17,6 +17,12 @@
     - list 281 trial 116
     - list 305 trial 28
     - list 308 trial 153
+    
+- Differently from the PTB sentences which are available in raw form, BLLIP materials had to be detokenized. This was done heuristicaly and unfortunately resulted in seveal issues.
+    - "'d" apppearing as a separate token (e.g. "I 'd" instead of "I'd"). 66 cases.
+    - "cann't" instead of "can't". 1249 cases.
+    - opening single quotes are attached to the preceding word (e.g. "It's called' eyetracking'.", instead of "It's called 'eyetracking'.")
+Note that the ngram and LSTM language models are trained on a versions of the BLLIP sentences in which these issues were fixed.
 
 *missing trials*
 - The following lists have a missing trial because the participant pressed on the proceed button before reading the sentence.
@@ -31,7 +37,3 @@
     - list 308 trial 138
     - list 317 trial 106
     - list 355 trial 141
-
-TODO: 
-- Add notes about missing quotes issues (same batch?)
-- Add notes about 'd issue

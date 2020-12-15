@@ -39,6 +39,6 @@ def main(release):
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--release", "-r", type=str, choices=['v1.0', 'v2.0'], default='v1.0', help="Dataset release")
+    parser.add_argument("--release", "-r", type=str, choices=['v1.0', 'v2.0'], default='v2.0', help="Dataset release")
     args = parser.parse_args()
     main(args.release)

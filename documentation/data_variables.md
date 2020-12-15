@@ -13,17 +13,15 @@ Interest Period (IP) for sentence reading: start message "DISPLAY_SENTENCE" (-2m
 - `answered_correctly`: whether the participant`s answer to the reading comprehension question was correct (1 if yes, 0 if no).
 - `sentence`: the sentence presented in the trial.
 - `question`: the reading comprehension question about the sentence.
-- `FREQ`: -log(word frequency) in BLLIP.
-- `OOV`: 1 if the word out of vocabulary, 0 otherwise.
-- `SURP-GPT2`: word surprisal according to the GPT2 language model (off-the-shelf). If the GPT tokenizer splits the word, the suprtisal value is the sum of the subword surprisals.
-- `SURP-LSTM`: word surprisal according to an LSTM language model trained on BLLIP .
+- `FREQ-BLLIP`: -log2(word frequency) in BLLIP.
+- `FREQ-SUBTLEX`: -log2(word frequency) based on SUBTLEX-US (Brysbaert and New 2009) https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus
+- `OOV-BLLIP`: 1 if the word out of vocabulary in BLLIP, 0 otherwise. BLLIP vocabulary size 229,538 words.
+- `OOV-SUBTLEX`: 1 if the word out of vocabulary in SUBTLEX-US, 0 otherwise. SUBTLEX-US vocabulary size 74,286 words.
+- `SURP-GPT2`: word surprisal according to the GPT2 language model (off-the-shelf). 
+- `SURP-LSTM`: word surprisal according to an LSTM language model trained on BLLIP.
 - `SURP-KENLM`: word suprisal according to a 5-gram language model (KenLM) trained on BLLIP.
 - `WORD_LEN`: word length in characters, excluding punctuation.
-- `WORD`: lowercased word, without punctuation.
-- `UPOS`: Google Universal part-of-speech tag.
-- `POS`: PTB part-of-speech tag.
-- `REL`: edge label to head word.
-- `HIND`: index of head word.
+- `WORD_NORM`: lowercased word, without punctuation. Numbers reprepresented as `NUM`.
 
 ### Data Viewer Variables in Interest Area Reports
 

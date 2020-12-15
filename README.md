@@ -81,9 +81,9 @@ Trial and participant splits.
 
 </a>
 
-- [eyetracking_variables.md](documentation/eyetracking_variables.md) Description of the variables in the fixations and interest area reports.
+- [eyetracking_variables.md](documentation/data_variables.md) Description of the variables in the fixations and interest area reports.
 - [metadata_variables.md](documentation/metadata_variables.md) Description of the variables in the metadata file.
-- [programs.md](documentation/EB_programs) Details on the Experiment Builder folders.
+- [programs.md](documentation/EB_programs.md) Details on the Experiment Builder folders.
 - [language_models.md](documentation/language_models.md) Details on langugae models from which surprisal values are extracted.
-- [syntactic_annotations.md](documentation/syntactic_annotations) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
+- [syntactic_annotations.md](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
 - [known_issues.md](documentation/known_issues.md) Known issues with the dataset.

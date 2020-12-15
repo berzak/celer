@@ -6,3 +6,4 @@ The annotations are available in the `annotations` folder, where each file prefi
 
 - `.ids` sentence ids
 - `.trees` phrase structure trees (taken from WSJ PTB and BLLIP)
+- `.conllu` dependency trees and Google universal POS tags obtained using the converstion tool of the Universal Dependency Treebank (UDT, McDonald et al. 2013).Note that this annotation scheme is outdated. We recommend using instead the current stadard of Universal Dependencies (UD) annotations. 

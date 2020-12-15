@@ -24,7 +24,7 @@ The eyetracking data is not made directly available due to licensing restictions
 
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
 2. Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`, and `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
-3. Run `python obtain_data.py`. This will download the a zipped folder with the data.
+3. Run `python obtain_data.py`. This will download the a zipped folder with the data. By default, the script will download v2.0 of the data. To obtain v1.0 run `python obtain_data.py --release v1.0`
 
 <a name="statistics">
 

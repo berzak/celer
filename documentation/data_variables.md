@@ -13,6 +13,8 @@ Interest Period (IP) for sentence reading: start message "DISPLAY_SENTENCE" (-2m
 - `answered_correctly`: whether the participant`s answer to the reading comprehension question was correct (1 if yes, 0 if no).
 - `sentence`: the sentence presented in the trial.
 - `question`: the reading comprehension question about the sentence.
+
+### Word Property Annotations
 - `FREQ-BLLIP`: -log2(word frequency) in BLLIP.
 - `FREQ-SUBTLEX`: -log2(word frequency) based on SUBTLEX-US (Brysbaert and New 2009) https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus
 - `OOV-BLLIP`: 1 if the word out of vocabulary in BLLIP, 0 otherwise. BLLIP vocabulary size 229,538 words.

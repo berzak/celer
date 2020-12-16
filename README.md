@@ -23,8 +23,9 @@ Eye movement recordings of ESL and native English speakers reading Wall Street J
 The eyetracking data is not made directly available due to licensing restictions of the Penn Treebank (PTB) and the BLLIP datasets from which the reading materials are drawn. In order to obtain the data with the underlying texts please follow these instructions (require Python 3).
 
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
-2. Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`, and `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
-3. Run `python obtain_data.py`. This will download the a zipped folder with the data. By default, the script will download v2.0 of the data. To obtain v1.0 run `python obtain_data.py --release v1.0`
+2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`. 
+   - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
+3. Run `python obtain_data.py`. This will download the a zipped `data_[version]/` data folder. By default, the script will download v2.0 of the data. To obtain v1.0 run `python obtain_data.py --release v1.0`
 
 <a name="statistics">
 
@@ -47,7 +48,7 @@ The eyetracking data is not made directly available due to licensing restictions
 
 **`data_[version]/`**
 
-SR DataViewer Interest Area and Fixation Reports for the latest release. 
+SR DataViewer Interest Area and Fixation Reports, and syntactic annotations. 
 
 - `sent_ia.tsv` Interest Area report.  
 - `sent_fix.tsv` Fixations report. 
@@ -81,9 +82,8 @@ Trial and participant splits.
 
 </a>
 
-- [eyetracking_variables.md](documentation/data_variables.md) Description of the variables in the fixations and interest area reports.
-- [metadata_variables.md](documentation/metadata_variables.md) Description of the variables in the metadata file.
-- [programs.md](documentation/EB_programs.md) Details on the Experiment Builder folders.
-- [language_models.md](documentation/language_models.md) Details on langugae models from which surprisal values are extracted.
-- [syntactic_annotations.md](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
-- [known_issues.md](documentation/known_issues.md) Known issues with the dataset.
+- [Eyetracking Variables](documentation/data_variables.md) Description of the variables in the fixations and interest area reports.
+- [Metadata Variables](documentation/metadata_variables.md) Description of the variables in the participants metadata file.
+- [Language Models](documentation/language_models.md) Details on langugae models from which surprisal values are extracted.
+- [Syntactic Annotations](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
+- [Known Issues.md](documentation/known_issues.md) Known issues with the dataset.

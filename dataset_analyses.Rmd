@@ -1,25 +1,23 @@
-Analyses for "CELER: Corpus of Eye Movements in Learner English Reading"
+Analyses for the paper: "A 365 Participants Corpus of \\ English Learner and Native Eye Movements in Reading"
 
-TODO: CHANGE CELER and GECO paths
 ```{r}
 set.seed(214)
-data_version = "v2.0"
 
 library(tidyverse)
 library(lme4)
 library(lmerTest)
 library(readxl)
-library("car")
-#library(optimx)
+
+geco_path = "~/GECO/"
 ```
 
 Load CELER and GECO metadata
 ```{r}
-geco_metadata = read_xlsx("~/GECO/SubjectInformation.xlsx", na = c("", ".")) %>% rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
+geco_metadata = read_xlsx(paste(geco_path, "SubjectInformation.xlsx", sep = ""), na = c("", ".")) %>% rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
                         L1 = as.factor(ifelse(GROUP == "bilingual", "Dutch", "English")),
                         DATASET = "GECO")
 
-celer_metadata = read.table("~/CELER/participant_metadata/metadata.tsv", header = TRUE, quote = "", sep = "\t") %>% mutate(English = ifelse(L1 == "English", "L1", "L2"),
+celer_metadata = read.table("participant_metadata/metadata.tsv", header = TRUE, quote = "", sep = "\t") %>% mutate(English = ifelse(L1 == "English", "L1", "L2"),
                         English.AoA =as.numeric(as.character(replace(English.AoA, English.AoA == "at birth", 0))),
                         DATASET = "CELER") %>%
                         column_to_rownames(var="List")
@@ -28,7 +26,7 @@ metadata_all = bind_rows(geco_metadata, celer_metadata) %>% mutate_at(c("English
 metadata_long = gather(metadata_all, "property", "x", c("Age", "English.AoA",  "MichiganLG"), factor_key = TRUE)
 ```
 
-
+Plot basic participant stats
 ```{r,fig.width=12,fig.height=4}
 property.labs = c("Age", "English Age of Acquisition", "MichiganLG")
 names(property.labs) = c("Age", "English.AoA", "MichiganLG")
@@ -59,15 +57,15 @@ code_native <- function(report){
 
 Load GECO
 ```{r}
-gecol2 <- read_xlsx("~/GECO/L2ReadingDataAugmented.xlsx", na = c("", ".")) 
-gecol1 <- read_xlsx("~/GECO/MonolingualReadingDataAugmented.xlsx", na = c("", "."))
+gecol2 <- read_xlsx(paste(geco_path,"L2ReadingDataAugmented.xlsx", sep = ""), na = c("", ".")) 
+gecol1 <- read_xlsx(paste(geco_path, "MonolingualReadingDataAugmented.xlsx", sep = ""), na = c("", "."))
 geco <- bind_rows(gecol1, gecol2) %>% mutate(WORD_ID = as.factor(WORD_ID),
                                             GROUP = as.factor(GROUP),
                                             PP_NR = as.factor(PP_NR),
                                             LANGUAGE_RANK = as.factor(LANGUAGE_RANK),
-                                            FREQ = as.double(FREQ),
-                                            FREQ_web = as.double(FREQ_web),
-                                            FREQ_subtlex = as.double(FREQ_subtlex)
+                                            FREQ_BLLIP = as.double(FREQ_BLLIP),
+                                            FREQ_WEB = as.double(FREQ_WEB),
+                                            FREQ_SUBTLEX = as.double(FREQ_SUBTLEX)
                                             #IA_DWELL_TIME = ifelse(is.na(WORD_TOTAL_READING_TIME), 0, WORD_TOTAL_READING_TIME)
                                             ) %>% 
                                       rename(SUBJECT = PP_NR,
@@ -77,11 +75,9 @@ geco <- bind_rows(gecol1, gecol2) %>% mutate(WORD_ID = as.factor(WORD_ID),
                                              IA_FIRST_FIXATION_DURATION = WORD_FIRST_FIXATION_DURATION,
                                              IA_FIRST_RUN_DWELL_TIME = WORD_GAZE_DURATION,
                                              IA_FIXATION_COUNT = WORD_FIXATION_COUNT,
-                                             IA_LABEL = WORD,
-                                             FREQ_bllip = FREQ,
-                                             OOV_bllip = OOV) %>% 
-                                      mutate(FREQ = FREQ_subtlex, #set default frequency to SUBTLEX
-                                             OOV = OOV_subtlex,
+                                             IA_LABEL = WORD) %>% 
+                                      mutate(FREQ = FREQ_SUBTLEX, #set default frequency to SUBTLEX
+                                             OOV = OOV_SUBTLEX,
                                              WORD_LEN = nchar(IA_LABEL),
                                              #Change SKIPS from FIRST PASS to TOTAL_FIXATION
                                              IA_SKIP = ifelse(is.na(IA_DWELL_TIME), 1, 0), 
@@ -95,15 +91,11 @@ geco_long <- gather(geco, "fix_measure", "RT", c('IA_SKIP', 'IA_FIRST_FIXATION_D
 Load CELER
 ```{r}
 #Load interest area report
-celer_ia <- read.table(paste("~/CELER/eyetracking_data/reports/",data_version, "/augmented/sent_ia.tsv", sep = ""),
-                            header = TRUE, quote = "", sep = "\t", na.strings = c("", ".")) %>%
+celer_ia <- read.table("data_v2.0/sent_ia.tsv", header = TRUE, quote = "", sep = "\t", na.strings = c("", ".")) %>%
                  rename(SUBJECT = list,
-                        TRIAL = trial,
-                        WORD_norm = WORD,
-                        FREQ_bllip = FREQ,
-                        OOV_bllip = OOV) %>% 
-                 mutate(FREQ = FREQ_bllip, #set default frequency to BLLIP
-                        OOV = OOV_bllip,
+                        TRIAL = trial) %>% 
+                 mutate(FREQ = FREQ_BLLIP, #set default frequency to BLLIP
+                        OOV = OOV_BLLIP,
                         IA_DWELL_TIME = na_if(IA_DWELL_TIME, 0), #ignore words that were not fixated for total reading time
                         WORD_ID = as.factor(paste(TRIAL, IA_ID, sep = "_")), #meaninfull only for the shared regime
                         IA_LABEL = as.character(IA_LABEL),
@@ -119,30 +111,29 @@ celer_ia_long <- gather(celer_ia, "fix_measure", "RT", c('IA_FIRST_FIXATION_DURA
 n_upper <- sum(str_count(celer_ia$IA_LABEL, "[A-Z]"), na.rm = TRUE)
 n_all_char <- sum(nchar(celer_ia$IA_LABEL), na.rm = TRUE)
 n_lower <- n_all_char - n_upper
+
 #0.36 degrees for lowercase letter, 0.49 for uppercase
 mean_char_visual_degrees = 0.36*(n_lower/n_all_char)+0.49*(n_upper/n_all_char) 
 CHARS_PER_ANGLE = 1/mean_char_visual_degrees
 
 #Load Fixation report
-celer_fix <- read.table(paste("~/CELER/eyetracking_data/reports/",data_version, "/augmented/sent_fix.tsv", sep = ""), header = TRUE, quote = "", sep = "\t", stringsAsFactors = FALSE) %>%
-              filter(NEXT_SAC_AMPLITUDE != '.', 
-                    CURRENT_FIX_INTEREST_AREA_ID != '.') %>% 
-              rename(SUBJECT = list,
-                     TRIAL = trial,
-                     WORD_norm = WORD,
-                     FREQ_bllip = FREQ,
-                      OOV_bllip = OOV) %>%
-              add_celer_meta_fields %>% 
-              code_native %>% 
-              mutate(FREQ = FREQ_bllip, #set default frequency to BLLIP
-                     OOV = OOV_bllip, 
-                     WORD_ID = as.factor(paste(TRIAL, CURRENT_FIX_INTEREST_AREA_ID, sep = "_")),
-                     REGRESSION = ifelse(NEXT_SAC_DIRECTION == "LEFT", 1, 0),
-                     NEXT_SAC_AMPLITUDE = as.double(NEXT_SAC_AMPLITUDE)*CHARS_PER_ANGLE,
-                     NEXT_SAC_AVG_VELOCITY = as.double(NEXT_SAC_AVG_VELOCITY)*CHARS_PER_ANGLE,
-                     DATASET = "CELER")
-
-
+celer_fix <- read.table("data_v2.0/sent_fix.tsv", header = TRUE, quote = "", sep = "\t", stringsAsFactors = FALSE) %>%
+                  filter(NEXT_SAC_AMPLITUDE != '.', 
+                         CURRENT_FIX_INTEREST_AREA_ID != '.') %>% 
+                  rename(SUBJECT = list,
+                         TRIAL = trial) %>%
+                  mutate(MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
+                         L1 = unlist(map(SUBJECT, function(x){celer_metadata[toString(x),"L1"]})),
+                         English = as.factor(ifelse(L1 == "English", "L1", "L2"))) %>% 
+                  code_native %>% 
+                  mutate(FREQ = FREQ_BLLIP, #set default frequency to BLLIP
+                         OOV = OOV_BLLIP, 
+                         WORD_ID = as.factor(paste(TRIAL, CURRENT_FIX_INTEREST_AREA_ID, sep = "_")),
+                         REGRESSION = ifelse(NEXT_SAC_DIRECTION == "LEFT", 1, 0),
+                         NEXT_SAC_AMPLITUDE = as.double(NEXT_SAC_AMPLITUDE)*CHARS_PER_ANGLE,
+                         NEXT_SAC_AVG_VELOCITY = as.double(NEXT_SAC_AVG_VELOCITY)*CHARS_PER_ANGLE,
+                         DATASET = "CELER")
+                  
 celer_fix_long <- gather(celer_fix, "fix_measure", "RT", c("CURRENT_FIX_DURATION", "NEXT_SAC_AMPLITUDE", "NEXT_SAC_AVG_VELOCITY", "REGRESSION"), factor_key = TRUE) 
 ```
 TODO?: can also filter NEXT_FIX_INTEREST_AREA_ID != '.' to exclude saccades that go outside the text region
@@ -243,7 +234,7 @@ filter_words <- function(df){
       df_filtered <- df %>% group_by(SUBJECT, TRIAL) %>% slice(2:(n()-1)) %>% ungroup() %>% #first and last words
                             filter(OOV == 0, #out of vocabulary words
                                   IA_DWELL_TIME > 0, #skips
-                                  !grepl("NUM", WORD_norm), #numbers
+                                  !grepl("NUM", WORD_NORM), #numbers
                                   !grepl('^[[:punct:]]|[[:punct:]]$', IA_LABEL)) #words with punctuation
   return(df_filtered)
 }

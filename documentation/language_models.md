@@ -16,7 +16,7 @@ We train a 5-gram language model using KenLM (https://kheafield.com/code/kenlm/)
 
 - Training data: The LSTM and ngram models are trained on the BLLIP corpus, excluding sentences which were used in CELER (14,274 sentences from BLLIP, and 313 sentences from WSJ PTB which have identical sentences in BLLIP). The remaining 1,781,792 sentences are dividided into 1,681,792 sentences (35,085,708 words) for training and 100,000 sentences (2,088,980 words) for validation (used for LSTM training). 
 - Preprocessing: 
-   -- Sentences were whitespace tokenized
-   -- Words were lowercased, punctuation was removed, numbers were converted to NUM (the same normalization is performed in the `WORD_NORM` field).
-   -- The order of the sentences was shuffled prior to language model training.
+   - Sentences were whitespace tokenized
+   - Words were lowercased, punctuation was removed, numbers were converted to NUM (the same normalization is performed in the `WORD_NORM` field).
+   - The order of the sentences was shuffled prior to language model training.
 - The LSTM model expects <eos> as the first token of the sentence.

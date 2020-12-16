@@ -31,7 +31,7 @@ Change Log from v1:
 
 1. The data for BLLIP_265_324_Tower and BLLIP_325_385_Tower was collected with the eyetracker in Tower mount configuration. All the other data was collected in Desktop configuration.
 2. These programs use sentences from the BLLIP corpus instead of the PTB-WJS.
-3. Switched screen resolution from 1024 x 768 to 2560 x 1440 (and repositioned and rescaled text accordingly)
-4. Correct Interest Area segmentation (precisely in the middle of the space between two words)
+3. Switched screen resolution from 1024 x 768 to 2560 x 1440 (and repositioned and rescaled text accordingly).
+4. Correct Interest Area segmentation (precisely in the middle of the space between two words).
 5. No recalibration and trial repetition on questions if failed to fixate on "Q" - trigger times out after 4 seconds. 
 This was introduced to reduce the number of recalibrations and to address an issue in v1 programs where the entire trial would repeat if recalibration was triggered after reading the sentence and before presenting the corresponding question (i.e. the sentence would be presented again).

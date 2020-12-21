@@ -16,7 +16,9 @@ Interest Period (IP) for sentence reading: start message "DISPLAY_SENTENCE" (-2m
 
 ### Word Property Annotations
 - `FREQ-BLLIP`: -log2(word frequency) in BLLIP.
+- `FREQ-SUBTLEX`: -log2(word frequency) based on SUBTLEX-US (Brysbaert and New 2009) https://www.ugent.be/pp/experimentele-psychologie/en/research/documents/subtlexus
 - `OOV-BLLIP`: 1 if the word out of vocabulary in BLLIP, 0 otherwise. BLLIP vocabulary size 229,538 words.
+- `OOV-SUBTLEX`: 1 if the word out of vocabulary in SUBTLEX-US, 0 otherwise. SUBTLEX-US vocabulary size 74,286 words.
 - `SURP-GPT2`: word surprisal according to the GPT2 language model (off-the-shelf). 
 - `SURP-KENLM`: word suprisal according to a 5-gram language model (KenLM) trained on BLLIP.
 - `SURP-LSTM`: word surprisal according to an LSTM language model trained on BLLIP.

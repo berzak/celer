@@ -12,7 +12,7 @@ The EB folders are available upon request.
 
 Notes:
 
-1. There are some minor differences in between these programs, in particular in the size of the fixation points and the required fixation duration for triggering the text (300ms vs 250ms).
+1. There are some minor differences between these programs, in particular in the size of the fixation points and the required fixation duration for triggering the text (300ms vs 250ms).
 2. Interest Area segmentation was not set correctly in these programs, resulting in interest area boundaries that are only approximately in the middle of the space between two words. This was corrected after data collection by regenerating the interest areas with the correct segmetation setting. The issue was fixed in v2 programs.
 3. Note to Data Viewer users: there are extra copies of the runtime files for participants pl2214 and cl2226 in folders jl2214 and jl2226 respectively:
 participant pl2214: Dataviewer may look for runtime files in the folder jl2214 

@@ -25,7 +25,8 @@ The eyetracking data is not made directly available due to licensing restictions
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
 2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`. 
    - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
-3. Run `python obtain_data.py`. This will download the a zipped `data_[version]/` data folder. By default, the script will download v2.0 of the data. To obtain v1.0 run `python obtain_data.py --release v1.0`
+3. Run `python obtain_data.py`. This will download a zipped `data_[version]/` data folder. Extract to the top level of this directory. By default, the script will download v2.0 of the data. To obtain v1.0 run `python obtain_data.py --release v1.0`
+
 
 <a name="statistics">
 
@@ -78,6 +79,14 @@ Trial and participant splits.
 
 <a name="docs">
 
+**`dataset_analyses.Rmd`**
+
+Analyses for the paper "CELER: A 365 Participants Corpus of English Learner and Native Eye Movements in Reading".
+Note that this script requires:
+- CELER (in the folder `data_[version]/`) and, 
+- Augmented GECO (in the folder `geco/`). Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory https://drive.google.com/file/d/1GGKzyfYM_iYrEQhiNUWosPciuGtGkBnz/view?usp=sharing.
+See futher documentation in [GECO Augmented](documentation/geco_augmented.md))
+
 ## Additional Documentation
 
 </a>
@@ -86,4 +95,5 @@ Trial and participant splits.
 - [Metadata Variables](documentation/metadata_variables.md) Description of the variables in the participants metadata file.
 - [Language Models](documentation/language_models.md) Details on langugae models from which surprisal values are extracted.
 - [Syntactic Annotations](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
+- [GECO Augmented](documentation/geco_augmented.md) Details on new fields added to GECO.
 - [Known Issues.md](documentation/known_issues.md) Known issues with the dataset.

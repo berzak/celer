@@ -1,4 +1,15 @@
-Analyses for the paper: "A 365 Participants Corpus of \\ English Learner and Native Eye Movements in Reading"
+Analyses for the paper: "A 365 Participants Corpus of English Learner and Native Eye Movements in Reading"
+
+Before running this script please obtain the data as follows:
+
+CELER:
+1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
+2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`. 
+   - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
+3. Run `python obtain_data.py`. This will download a zipped `data_[version]/` data folder. Extract to the top level of this directory.
+
+GECO:
+Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory https://drive.google.com/file/d/1GGKzyfYM_iYrEQhiNUWosPciuGtGkBnz/view?usp=sharing
 
 ```{r}
 set.seed(214)
@@ -7,13 +18,11 @@ library(tidyverse)
 library(lme4)
 library(lmerTest)
 library(readxl)
-
-geco_path = "~/GECO/"
 ```
 
 Load CELER and GECO metadata
 ```{r}
-geco_metadata = read_xlsx(paste(geco_path, "SubjectInformation.xlsx", sep = ""), na = c("", ".")) %>% rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
+geco_metadata = read_xlsx("geco/SubjectInformation.xlsx", na = c("", ".")) %>% rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
                         L1 = as.factor(ifelse(GROUP == "bilingual", "Dutch", "English")),
                         DATASET = "GECO")
 
@@ -31,24 +40,23 @@ Plot basic participant stats
 property.labs = c("Age", "English Age of Acquisition", "MichiganLG")
 names(property.labs) = c("Age", "English.AoA", "MichiganLG")
 plot_data = filter(metadata_long, English == "L2")
-p<-ggplot() +
-  theme_minimal(base_size = 40) +
-  geom_histogram(data = plot_data, aes(x = x, fill = DATASET), binwidth = 4, alpha = 0.7) +
-  facet_grid(. ~ property, scales = "free",labeller = labeller(property = property.labs)) +
-  scale_color_manual(values = c("CELER"="blue", "GECO"="red")) +
-  scale_fill_manual(values = c("CELER"="blue", "GECO"="red")) +
-  theme(aspect.ratio=1) +
-  labs(y = "# ESL Participants",
-       x = NULL,
-       fill = "Dataset")
-ggsave(file="dataset_analyses_figures/participants.png", p)
+p <- ggplot() +
+      theme_minimal(base_size = 40) +
+      geom_histogram(data = plot_data, aes(x = x, fill = DATASET), binwidth = 4, alpha = 0.7) +
+      facet_grid(. ~ property, scales = "free",labeller = labeller(property = property.labs)) +
+      scale_color_manual(values = c("CELER"="blue", "GECO"="red")) +
+      scale_fill_manual(values = c("CELER"="blue", "GECO"="red")) +
+      theme(aspect.ratio=1) +
+      labs(y = "# ESL Participants",
+           x = NULL,
+           fill = "Dataset")
+    ggsave(file="dataset_analyses_figures/participants.png", p)
 p
 ```
 
 ```{r}
 code_native <- function(report){
     report$L2_01 <- ifelse(report$English == "L2", 1, 0)
-    report$L1_01 <- ifelse(report$English == "L1", 1, 0)
     report$L2_0.5 <- ifelse(report$English == "L2", 0.5, -0.5)
     report$L2_11 <- ifelse(report$English == "L2", 1, -1)
     return(report)
@@ -57,8 +65,8 @@ code_native <- function(report){
 
 Load GECO
 ```{r}
-gecol2 <- read_xlsx(paste(geco_path,"L2ReadingDataAugmented.xlsx", sep = ""), na = c("", ".")) 
-gecol1 <- read_xlsx(paste(geco_path, "MonolingualReadingDataAugmented.xlsx", sep = ""), na = c("", "."))
+gecol2 <- read_xlsx("geco/L2ReadingDataAugmented.xlsx", na = c("", ".")) 
+gecol1 <- read_xlsx("geco/MonolingualReadingDataAugmented.xlsx", na = c("", "."))
 geco <- bind_rows(gecol1, gecol2) %>% mutate(WORD_ID = as.factor(WORD_ID),
                                             GROUP = as.factor(GROUP),
                                             PP_NR = as.factor(PP_NR),
@@ -154,6 +162,7 @@ mean_lmer <- function(report){
 }
 
 run_lmer <- function(report){
+  
   shared_text = unique(report$shared_text)
   measure = unique(report$fix_measure)
   

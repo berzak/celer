@@ -1,4 +1,4 @@
-# CELER: Corpus of English Learner and Native Eye-Movements in Reading
+# CELER: Corpus of Eye movements in Learner and native English Reading
 
 Eye movement recordings of ESL and native English speakers reading Wall Street Journal (WSJ) newswire sentences in English. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant. The dataset has two versions v1 (182 participants) and v2 (365 participants).
 
@@ -81,11 +81,11 @@ Trial and participant splits.
 
 **`dataset_analyses.Rmd`**
 
-Analyses for the paper "CELER: A 365 Participants Corpus of English Learner and Native Eye Movements in Reading".
+Analyses for the paper "CELER: A 365 Participants Corpus of Eye Movements in Learner and Native English Reading".
 Note that this script requires:
 - CELER (in the folder `data_[version]/`) and, 
-- Augmented GECO (in the folder `geco/`). Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory https://drive.google.com/file/d/1GGKzyfYM_iYrEQhiNUWosPciuGtGkBnz/view?usp=sharing.
-See futher documentation in [GECO Augmented](documentation/geco_augmented.md))
+- GECO Augmented (in the folder `geco/`). Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory https://drive.google.com/file/d/1sxj21lVdAEmzaM_u8ESuKceLxwOcHUpL/view?usp=sharing
+See further documentation in [GECO Augmented](documentation/geco_augmented.md))
 
 ## Additional Documentation
 

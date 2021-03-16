@@ -8,7 +8,7 @@
 - `Program` DataViewer program folder. 
 - `L1` Native language.
 - `Age` Age.
-- `Gender` Gender: male / female / other.
+- `Gender` Gender: female / male / other.
 - `Education` Level of education: primary / secondary / university.
 - `English AoA` English Age of Acquisition. The age at which the participant started learning English.
 - `English Speaking Countries` English speaking countries in which the participant lived, and for how long.

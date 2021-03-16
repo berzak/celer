@@ -12,7 +12,7 @@ Interest Period (IP) for sentence reading: start message "DISPLAY_SENTENCE" (-2m
 - `shared_text`: 1 if the trial is in the Shared Text regime (appears in all the lists), 0 if it`s in the Individual Text regime (unique to current list).
 - `sentence`: the sentence presented in the trial.
 - `sentenceid`: sentence identifyer. 
-- `trial`: trial number (2-156).
+- `trial`: trial number (2-157).
 
 ### Word Property Annotations
 - `FREQ-BLLIP`: -log2(word frequency) in BLLIP (Charniak et al. 2000).

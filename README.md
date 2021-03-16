@@ -1,6 +1,6 @@
-# CELER: Corpus of Eye movements in Learner and native English Reading
+# CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading
 
-Eye movement recordings of ESL and native English speakers reading Wall Street Journal (WSJ) newswire sentences in English. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant. The dataset has two versions v1 (182 participants) and v2 (365 participants).
+Eye movement recordings of ESL and native English speakers reading Wall Street Journal (WSJ) newswire sentences in English. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant.
 
 ### Example
 
@@ -13,6 +13,7 @@ Eye movement recordings of ESL and native English speakers reading Wall Street J
 2. [Statistics](#statistics)  
 3. [Directory Structure](#files)
 4. [Additional Documentation](#docs)
+5. [Citation](#cite)
 
 <a name="obtaining">
 
@@ -81,10 +82,11 @@ Trial and participant splits.
 
 **`dataset_analyses.Rmd`**
 
-Analyses for the paper "CELER: A 365 Participants Corpus of Eye Movements in Learner and Native English Reading".
+Analyses for the paper "CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading".
 Note that this script requires:
 - CELER (in the folder `data_[version]/`) and, 
-- GECO Augmented (in the folder `geco/`). Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory https://drive.google.com/file/d/1sxj21lVdAEmzaM_u8ESuKceLxwOcHUpL/view?usp=sharing
+- GECO Augmented (in the folder `geco/`). Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory
+https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing
 See further documentation in [GECO Augmented](documentation/geco_augmented.md))
 
 ## Additional Documentation
@@ -93,7 +95,17 @@ See further documentation in [GECO Augmented](documentation/geco_augmented.md))
 
 - [Eyetracking Variables](documentation/data_variables.md) Description of the variables in the fixations and interest area reports.
 - [Metadata Variables](documentation/metadata_variables.md) Description of the variables in the participants metadata file.
-- [Language Models](documentation/language_models.md) Details on langugae models from which surprisal values are extracted.
+- [Language Models](documentation/language_models.md) Details on langugae models for surprisal values.
 - [Syntactic Annotations](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
 - [GECO Augmented](documentation/geco_augmented.md) Details on new fields added to GECO.
 - [Known Issues.md](documentation/known_issues.md) Known issues with the dataset.
+
+<a name="cite">
+
+## Citation
+
+CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading
+
+TODO: Add citation
+
+</a>

@@ -13,9 +13,6 @@ Download GECO augmented with frequency and surprisal values from the following u
 https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing
 
 ```{r}
-
-#TODO: change CELER path
-
 set.seed(214)
 
 library(tidyverse)
@@ -27,8 +24,6 @@ library(JuliaCall)
 
 j<-julia_setup()
 j$library("MixedModels")
-
-DATA_VERSION = 0 #0 for entire dataset, 1 for v1, 2 for subjects new to v2
 ```
 
 Load CELER and GECO metadata and Plot basic participant stats
@@ -111,10 +106,6 @@ Load CELER Interest area report
 #Load interest area report
 celer_ia <- read.table("data_v2.0/sent_ia.tsv", header = TRUE, quote = "", sep = "\t", na.strings = c("", ".")) 
 
-if (DATA_VERSION %in% c(1,2)){
-  celer_ia <- filter(celer_ia, dataset_version == DATA_VERSION)
-}
-
 celer_ia <- celer_ia %>%
                  #rename variables
                  rename(SUBJECT = list,
@@ -173,10 +164,6 @@ Load CELER Fixation report
 ```{r}
 #Load Fixation report
 celer_fix <- read.table("data_v2.0/sent_fix.tsv", header = TRUE, quote = "", sep = "\t", stringsAsFactors = FALSE) 
-
-if (DATA_VERSION %in% c(1,2)){
-  celer_fix <- filter(celer_fix, dataset_version == DATA_VERSION)
-}
 
 celer_fix <- celer_fix %>%
                   #filter out saccades to and from locations that outside the text area
@@ -371,247 +358,3 @@ for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
       cat("\n")
 }
 ```
-
-
-```{r}
-get_fixed_effects <- function(report, parametrization){
-  
-      shared_text = unique(report$shared_text)
-      dataset_name = unique(report$DATASET)
-      measure = unique(report$fix_measure)
-      
-      print(paste(dataset_name, measure))
-      if(dataset_name == "CELER"){
-          print("CELER")
-          if(parametrization == "nested"){
-              m <- lmer(RT ~ English/FREQ + English/SURP_GPT2 + English/WORD_LEN + 
-                        (FREQ + SURP_GPT2 + WORD_LEN | SUBJECT) + (SURP_GPT2 | WORD_NORM), 
-                         control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data = report)
-          }else{
-              m <- lmer(RT ~ L2_05*FREQ + L2_05*SURP_GPT2 + L2_05*WORD_LEN + 
-                        (FREQ + SURP_GPT2 + WORD_LEN | SUBJECT) + (SURP_GPT2| WORD_NORM),# +  
-                        control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report) #
-          }
-      }else{
-        print("GECO")
-
-        if(parametrization == "nested"){
-              m <- lmer(RT ~ English/FREQ + English/SURP_GPT2 + English/WORD_LEN + 
-                        (FREQ + SURP_GPT2 + WORD_LEN | SUBJECT) + (1 | WORD_ID), #
-                        control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data = report)
-          }else{
-              m <- lmer(RT ~ L2_05*FREQ + L2_05*SURP_GPT2 + L2_05*WORD_LEN + 
-                        (FREQ + SURP_GPT2 + WORD_LEN | SUBJECT) + (1 | WORD_ID), #
-                        control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-          }
-      }
-      coefs <- data.frame(summary(m)$coefficients) %>% rownames_to_column("COEF") %>% mutate(CI = Std..Error*1.96)
-      return(coefs)
-}
-```
-
-```{r}
-#coefs_celer <- filter(celer_ia_oov_long, shared_text == 0, fix_measure == "FIRST_FIXATION") %>% group_by(DATASET) %>% do(get_fixed_effects(., "nested"))
-
-# m <- lm(RT ~ English/FREQ + English/SURP_GPT2 + English/WORD_LEN, data = filter(celer_ia_oov_long, fix_measure == "FIRST_FIXATION"))
-#coefs <- data.frame(summary(m)$coefficients) %>% rownames_to_column("COEF") %>% mutate(CI = Std..Error*1.96)
-#print(coefs)
-#coefs_celer <- filter(celer_ia_oov_long, fix_measure == "IA_FIRST_RUN_DWELL_TIME") %>% do(get_fixed_effects(., "nested"))
-
-
-m <- lmer(RT ~ English/FREQ + English/SURP_GPT2 + English/WORD_LEN + 
-                        (FREQ + SURP_GPT2 + WORD_LEN | SUBJECT) + (1 | WORD_ID), #
-                        control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data = filter(geco_ia_oov_long, fix_measure == "FIRST_FIXATION"))
-c <- data.frame(summary(m)$coefficients) %>% rownames_to_column("COEF") %>% mutate(CI = Std..Error*1.96)
-print(c)
-
-```
-
-
-```{r}
-```
-```{r}
-coefs
-```
-
-```{r}
-coefs_celer <- celer_ia_oov_long %>% group_by(DATASET, fix_measure) %>% do(get_fixed_effects(., "nested"))
-coefs_geco <- geco_ia_oov_long %>% group_by(DATASET, fix_measure) %>% do(get_fixed_effects(., "nested"))
-
-```
-
-Print coefficients
-```{r}
-print(coefs_geco) %>% mutate_if(is.numeric, round, digits=1)
-print(coefs_celer) %>% mutate_if(is.numeric, round, digits=1)
-```
-```
-
-Interactions of word propety effect and English status
-```{r}
-inter_geco <- geco_ia_oov_long %>% group_by(DATASET, fix_measure) %>% do(get_fixed_effects(., "unnested"))
-inter_celer <- celer_ia_oov_long %>% group_by(DATASET, shared_text, fix_measure) %>% do(get_fixed_effects(., "unnested"))
-```
-
-```{r}
-inter_geco #%>% mutate_if(is.numeric, round, digits=1)
-inter_celer# %>% mutate_if(is.numeric, round, digits=1)
-```
-Obtain random effects for separately for L1 and L2 in CELER and GECO
-```{r}
-get_random_effects <- function(dataset){
-  print(paste(unique(dataset$DATASET), unique(dataset$English)))
-  m <- lmer(IA_DWELL_TIME ~ FREQ + SURP_GPT2 + WORD_LEN + (FREQ + SURP_GPT2+ WORD_LEN ||SUBJECT) , data=dataset) #+ (1|WORD_ID)
-  re = ranef(m)
-  dev = summary(m)$coefficients[,1]
-  re$SUBJECT = sweep(re$SUBJECT, 2, dev, "/") #divide random effects by fixed effects
-  coefs = re$SUBJECT %>% rownames_to_column("SUBJECT")
-  return(coefs)
-}
-
-coefs_geco <- geco_ia_oov %>% group_by(DATASET,English) %>% do(get_random_effects(.)) %>% gather(key=coef, value  = random_to_fixed_ratio, -SUBJECT, -DATASET, -English) %>% ungroup()
-coefs_celer_shared <- celer_ia_oov %>% filter(shared_text == 1) %>% group_by(DATASET,English) %>% do(get_random_effects(.)) %>% gather(key=coef, value  = random_to_fixed_ratio, -SUBJECT, -DATASET, -English) %>% ungroup() #
-coefs_celer_shared
-```
-
-```{r}
-coefs_all <- bind_rows(coefs_geco, coefs_celer_shared) %>% mutate(DATASET = as.factor(DATASET),
-                                                                  SUBJECT = as.factor(SUBJECT),
-                                                                  coef = as.factor(coef))
-coefs_all
-```
-
-```{r}
-library(lattice)
-p <- ggplot() +
-      theme_bw() +
-      geom_point(data = coefs_all, aes(x = coef, y = random_to_fixed_ratio, fill = DATASET), 
-              pch = 21, position = position_jitterdodge(dodge.width = 1), alpha = 0.3) + 
-      geom_boxplot(data = coefs_all, aes(x = coef, random_to_fixed_ratio, fill = DATASET), width = 0.3, outlier.size = 0) +
-      facet_grid(English ~ ., scales = "free")+
-      theme(axis.title.x=element_blank())
-
-ggsave(file="dataset_analyses_figures/coefs_tf_shared.pdf", p)#height=20,width=24,
-p
-```
-
-
-Test for difference in variances between CELER and GECO (dradt)
-```{r}
-int_coefs <- coefs_all %>% filter(coef == "SURP_GPT2", English == "L2")
-#test = var.test(random_to_fixed_ratio ~ DATASET, data = int_coefs)
-test = leveneTest(random_to_fixed_ratio ~ DATASET, data = int_coefs, center = mean)
-test
-```
-
-
-```{r}
-proficiency_data <- filter(celer_ia_oov, shared_text ==1, English == "L2") %>% mutate(MPT = MPT - mean(MPT))
-m <- lmer(IA_DWELL_TIME ~ FREQ*MPT + SURP_GPT2*MPT + WORD_LEN*MPT + (FREQ + SURP_GPT2+ WORD_LEN ||SUBJECT) , data=proficiency_data)
-summary(m)
-```
-
-
-THE FOLLOWING IS TESTING FOR DIFFERENT WAYS TO GET ERROR BARS AROUND MEANS (TODO: REMOVE)
-
-
-L1 mean
-```{r}
-filter(celer_ia, shared_text == 1, English == "L1") %>% summarize(mean(IA_DWELL_TIME, na.rm = TRUE))
-```
-
-
-```{r}
-predict_from_model <- function(model, value){
-  c <- summary(model)$coefficients[,1]
-  x <- as.matrix(value)
-  mean <- c%*%x
-  se <- sqrt(t(x)%*%vcov(model)%*%x)
-  return(c(mean= mean, SE = drop(se)))
-} 
-```
-
-These are the model coefficients with both L1 and L2 (-0.5 L1, 0.5 L2)
-```{r}
-mAll <- lmer(IA_DWELL_TIME ~ L2_05 + (1 |SUBJECT) + (L2_05|WORD_ID), 
-           data=filter(celer_ia, shared_text == 1))
-summary(mAll)$coefficients
-```
-Predicting from this model.
-```{r}
-predict_from_model(mAll, c(1,-05))
-```
-
-Intercerept model for L1 participants. Result: standard error much smaller.
-```{r}
-mL1 <- lmer(IA_DWELL_TIME ~ 1 + (1 |SUBJECT) + (1|WORD_ID), data=filter(celer_ia, shared_text ==1, English == "L1")) #filter(geco_ia, English != "L1"))
-summary(mL1)$coefficients
-```
-
-Predicting from this model.
-```{r}
-predict_from_model(mL1, c(1))
-```
-
-Raw Skip Rate
-```{r}
-filter(celer_ia, English == "L1") %>% summarise(mean(IA_SKIP))
-```
-
-```{r}
-#mL2 <- lmer(IA_SKIP ~ 1 + (1 |SUBJECT) + (1|WORD_ID), data=filter(celer_ia, shared_text ==1, English == "L2"))  
-#summary(mg)$coefficients
-mL2 <- glm(IA_SKIP ~ 1 + (1|SUBJECT)  + (1 |WORD_ID), family = binomial(), data=filter(celer_ia, shared_text ==1, English == "L2"))
-#m <- glmer(IA_SKIP ~ -1 + L2_05 + (-1 + L2_05 | WORD_ID), family = binomial(), data=celer_ia)
-
-```
-```{r}
-vcov(mL2)
-```
-
-```{r}
-summary(mL2)$coefficients[1:2]
-coef = summary(mL2)$coefficients[1]
-se = summary(mL2)$coefficients[2]
-coef_logistic = exp(coef)/(1+exp(coef))
-coef_logistic
-upper = coef+se
-upper
-upper_prob <-exp(upper)/(1+exp(upper))
-upper_prob
-upper_prob-coef_logistic
-```
-```{r}
-#mAll <-glm(IA_SKIP ~ L2_05 + (1|SUBJECT) + (L2_05|WORD_ID), family = binomial(), data=filter(celer_ia, shared_text ==1)) 
-mAll <-lmer(IA_SKIP ~ L2_05 + (1|SUBJECT) + (L2_05|WORD_ID), data=filter(celer_ia, shared_text ==1)) 
-```
-
-```{r}
-#summary(mAll)$coefficients[,1]
-x <-c(1,0.5)
-#predict_from_model(mAll, x)
-t(x)
-vcov(mAll)
-```
-
-```{r}
-celer_ia_shared %>% group_by(English) %>% summarise(mean(IA_SKIP))
-```
-
-
-```{r}
-m <- lmer(paste("IA_SKIP", "~ L2_05 + (1 |SUBJECT) + (L2_05|WORD_ID)"), data=filter(celer_ia, shared_text ==1))  
-summary(m)$coefficients
-```
-
-```{r}
-vcov(m)
-```
-
-
-```{r}
-summary(glmer(paste("IA_FIXATION_COUNT", " ~ 1 + (1 |SUBJECT) + (1|WORD_ID)"), family = poisson(), data = filter(celer_ia, L1 != "English")))$coefficients
-```
-
-
-

@@ -1,7 +1,7 @@
 **`participant_metadata/`**
 
 - `metadata.tsv` Several missing values for Gender and Age.
-- `test_scores/michigan/item-scores-MichiganLG` 5 missing values for MichiganLG answers (counted as incorrect answers). These occured at an early stage of the experiment when it was possible to submit the test without answering all the questions.
+- `test_scores/michigan/item-scores-MichiganLG` 5 missing values for MichiganLG answers (counted as incorrect answers). These occured at an early stage of the data collection when it was possible to submit the test without answering all the questions.
 
 **Eye-tracking data issues**
 
@@ -20,7 +20,7 @@
     - list 355 trial 141
 
 *v1 issues*
-- In v1, when failed to fixate on "Q" target (preceding the presentation of the question) recalibration is triggered and the entire trial is repeated. As a result, in trials where this happened the sentence was read more than once. In such cases, in the eye-tracking reports we have only the first presentation of the sentence (and discard subsequent presentations). This issue was fixed for participants new to v2, where recalibration occurs only on sentence triggers. See [programs.md](documentation/EB_programs) for further changes between versions 1 and 2.
+- In v1, when failed to fixate on "Q" target (preceding the presentation of the question) recalibration is triggered and the entire trial is repeated. As a result, in trials where this happened the sentence was read more than once. In such cases, in the eye-tracking reports we have only the first presentation of the sentence (and discard subsequent presentations). This issue was fixed for participants new to v2, where recalibration occurs only on sentence triggers. See [EB_programs](EB_programs.md) for further changes between versions 1 and 2.
 
 *v2 issues*
 - The following lists (from the program BLLIP_265_324_Tower) have each a trial in the individual portion that was removed because the sentence was accidentally replaced with #NAME? in the data file (the data file was passed through excel for this batch).
@@ -32,9 +32,10 @@
     - list 305 trial 28
     - list 308 trial 153
     
-- Differently from the PTB sentences which are available in raw form, BLLIP materials had to be detokenized. This was done heuristicaly and unfortunately resulted in seveal issues.
+- Differently from the PTB sentences which are available in raw form, BLLIP materials had to be detokenized. This was done heuristicaly and resulted in seveal issues:
     - "'d" apppearing as a separate token (e.g. "I 'd" instead of "I'd"). 66 cases.
     - "cann't" instead of "can't". 1249 cases.
     - opening single quotes are attached to the preceding word (e.g. "It's called' eyetracking'.", instead of "It's called 'eyetracking'.")
-Note that the ngram and LSTM language models are trained on a versions of the BLLIP sentences in which these issues were fixed.
+
+The ngram and LSTM language models are trained on a versions of the BLLIP sentences in which these issues were fixed.
 

@@ -1,6 +1,6 @@
 # CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading
 
-Eye movement recordings of ESL and native English speakers reading Wall Street Journal (WSJ) newswire sentences in English. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant.
+Eye movement recordings of 69 native English speakers and 296 English learners reading Wall Street Journal (WSJ) newswire sentences. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant.
 
 ### Example
 
@@ -31,16 +31,15 @@ The eyetracking data is not made directly available due to licensing restictions
 
 <a name="statistics">
 
-## Statistics
+## Statistics (v2.0)
 
 </a>
 
-|         |v1            |          |          | v2           |           |        |
-| ---     | ---          | ---      | ---      | ---          | ---       | ---    |
-|         | Participants | Sentences| Words    | Participants | Sentences | Words  |
-| Native  | 37           |  2,964   |   33,519 |  69          | 5,460     | 61,272 |
-| ESL     | 145          |  11,388  |  129,892 |  296         | 23,166    | 260,888|
-| Total   | 182          |  14,274  | 162,511  |  365         | 28,548    | 321,260 |
+|         | Participants | Sentences | Words   |
+| ---     | ---          | ---       | ---     |
+| Native  | 69           | 5,460     | 61,272  |
+| ESL     | 296          | 23,166    | 260,888 |
+| Total   | 365          | 28,548    | 321,260 |
 
 <a name="files">
 
@@ -60,7 +59,7 @@ SR DataViewer Interest Area and Fixation Reports, and syntactic annotations.
 
 - `metadata.tsv` metadata on participants.
 
-- `test scores/`
+- `test_scores/`
     - `test_conversion.tsv` unofficial conversion table between standardized proficiency tests (used to convert TOEIC to TOEFL scores).  
     - `michigan/` Item level responses for the Michigan Placement Test (MPT).   
     - `comprehension/` Item level responses for the reading comprehension during the eyetracking experiment.  
@@ -89,7 +88,7 @@ Note that this script requires:
 https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing
 See further documentation in [GECO Augmented](documentation/geco_augmented.md))
 
-## Additional Documentation
+## Documentation
 
 </a>
 
@@ -98,7 +97,7 @@ See further documentation in [GECO Augmented](documentation/geco_augmented.md))
 - [Language Models](documentation/language_models.md) Details on langugae models for surprisal values.
 - [Syntactic Annotations](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
 - [GECO Augmented](documentation/geco_augmented.md) Details on new fields added to GECO.
-- [Known Issues.md](documentation/known_issues.md) Known issues with the dataset.
+- [Known Issues](documentation/known_issues.md) Known issues with the dataset.
 
 <a name="cite">
 

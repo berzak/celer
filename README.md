@@ -84,9 +84,7 @@ Trial and participant splits.
 Analyses for the paper "CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading".
 Note that this script requires:
 - CELER (in the folder `data_[version]/`) and, 
-- GECO Augmented (in the folder `geco/`). Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory
-https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing
-See further documentation in [GECO Augmented](documentation/geco_augmented.md))
+- GECO Augmented (in the folder `geco/`). Download [GECO augmented](https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing) with frequency and surprisal values and place `geco/` at the top level of this directory.
 
 ## Documentation
 
@@ -97,6 +95,7 @@ See further documentation in [GECO Augmented](documentation/geco_augmented.md))
 - [Language Models](documentation/language_models.md) Details on langugae models for surprisal values.
 - [Syntactic Annotations](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
 - [GECO Augmented](documentation/geco_augmented.md) Details on new fields added to GECO.
+- [Experiment Builder Programs](documentation/EB_programs.md) Information on the EB experiment.
 - [Known Issues](documentation/known_issues.md) Known issues with the dataset.
 
 <a name="cite">

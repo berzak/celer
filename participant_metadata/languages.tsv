@@ -1,0 +1,530 @@
+List	ID	Language	Variety	AoA	Years	Proficiency
+1	pl261	Portuguese		0	46.0	native
+2	pl262	Portuguese	Brazil	0	29.0	native
+3	l172	Spanish		10	16.0	advanced
+3	l172	Arabic		20	4.0	intermediate
+4	pl2243	Portuguese	Brazil	0	30.0	native
+4	pl2243	Spanish		18	4.0	intermediate
+6	pl2239	Portuguese	Brazil	0	26.0	native
+7	pl2240	Portuguese	Brazil	0	36.0	native
+7	pl2240	Spanish		20	2.0	intermediate
+8	l166					
+9	l167					
+10	l168					
+11	cl264	Chinese		0	29.0	native
+12	l145					
+13	l169					
+14	sl2266	Spanish	Spain	0	38.0	native
+15	jl265	Japanese		0	36.0	native
+16	pl2262	Portuguese	Brazil	0	22.0	native
+16	pl2262	French		21	1.0	advanced
+16	pl2262	Spanish		14	7.0	advanced
+17	sl269	Spanish		0	26.0	native
+18	l171					
+19	pl2242	Portuguese	Brazil	0	31.0	native
+20	cl271	Chinese		0	21.0	native
+21	sl275	Spanish		0	21.0	native
+21	sl275	French		19	2.0	beginner
+22	jl276	Japanese		0	39.0	native
+23	l175					
+24	cl277	Chinese	Mandarin	0	27.0	native
+25	l174	Spanish		14	2.0	beginner
+26	cl278	Chinese	Mandarin	0	33.0	native
+27	pl279	Portuguese		0	19.0	native
+27	pl279	Spanish		19	1.0	beginner
+28	pl2246	Portuguese	Brazil	0	25.0	native
+28	pl2246	French		20	1.0	beginner
+29	pl281	Portuguese		0	27.0	native
+30	l176					
+31	pl254	Portuguese		0	24.0	native
+32	cl282	Chinese	Mandarin	0	21.0	native
+33	pl2248	Portuguese	Portugal	0	30.0	native
+33	pl2248	French		12	4.0	beginner
+33	pl2248	Italian		24	1.0	beginner
+34	cl283	Chinese		0	25.0	native
+35	cl284	Chinese	Mandarin	0	28.0	native
+36	jl286	Japanese		0	29.0	native
+37	l178	French		11	5.0	intermediate
+38	cl287	Chinese	Mandarin	0	19.0	native
+39	cl288	Chinese	Mandarin	0	19.0	native
+40	pl289	Portuguese		0	18.0	native
+41	sl290	Spanish	Argentina	0	26.0	native
+42	l179					
+43	sl291	Spanish		0	28.0	native
+43	sl291	French		14	8.0	intermediate
+44	sl292	Spanish		0	30.0	native
+44	sl292	Italian		22	4.0	advanced
+45	l181					
+46	l182	Spanish		0	21.0	intermediate
+47	cl294	Chinese		0	25.0	native
+48	sl295	Spanish		0	25.0	native
+49	l183	Spanish		4	9.0	advanced
+49	l183	Russian		20	1.0	intermediate
+50	l184					
+51	cl296	Chinese	Mandarin	0	20.0	native
+52	sl297	Spanish		0	18.0	native
+52	sl297	French		16	2.0	intermediate
+53	l185	Spanish		13	9.0	intermediate
+54	cl298	Chinese	Mandarin	0	24.0	native
+55	sl299	Spanish		0	29.0	native
+55	sl299	German		27	2.0	intermediate
+56	cl2100	Chinese	Mandarin	0	19.0	native
+57	l186	Spanish		13	4.0	beginner
+58	jl2103	Japanese		0	29.0	native
+59	jl2104	Japanese		0	29.0	native
+60	cl2105	Chinese	Mandarin	0	17.0	native
+61	cl2107	Chinese	Mandarin	0	26.0	native
+61	cl2107	Chinese	Cantonese	10	10.0	advanced
+62	jl2108	Japanese		0	21.0	native
+63	cl2109	Chinese	Mandarin	2	25.0	native
+64	l187	French		12	7.0	beginner
+65	sl2111	Spanish		0	23.0	native
+66	cl2112	Chinese	Cantonese	0	43.0	native
+66	cl2112	Chinese	Mandarin	0	43.0	native
+67	l188	Spanish		14	5.0	advanced
+67	l188	French		16	3.0	intermediate
+68	sl2113	Spanish		0	24.0	native
+68	sl2113	Basque		2	22.0	advanced
+68	sl2113	Italian		20	4.0	advanced
+69	pl2249	Portuguese		0	26.0	native
+69	pl2249	Spanish		22	4.0	beginner
+70	pl2115	Portuguese	Brazil	0	30.0	native
+70	pl2115	Spanish		13	4.0	beginner
+71	sl2116	Spanish	Spain	0	24.0	native
+71	sl2116	Italian		19	2.0	intermediate
+72	sl2117	Catalan	Spain	0	23.0	native
+72	sl2117	Spanish	Spain	0	23.0	native
+73	cl2118	Chinese	Mandarin	0	42.0	native
+74	pl2123	Portuguese	Brazil	0	36.0	native
+74	pl2123	Spanish		30	6.0	intermediate
+75	pl2124	Portuguese	Brazil	0	26.0	native
+76	pl2125	Portuguese		0	23.0	native
+76	pl2125	Spanish		21	2.0	beginner
+77	cl2126	Chinese	Mandarin	0	26.0	native
+78	l189	Yiddish		0	20.0	native
+79	sl2127	Spanish	Spain	0	26.0	native
+80	sl2128	Spanish		0	23.0	native
+81	cl2129	Chinese	Mandarin	0	19.0	native
+82	jl2130	Japanese		0	32.0	native
+83	pl2131	Portuguese	Brazil	0	31.0	native
+84	sl2133	Spanish	Puerto Rico	0	17.0	native
+85	cl2134	Chinese		0	23.0	native
+86	cl2136	Chinese	Mandarin	0	14.0	native
+87	sl2137	Spanish	Mexico	0	23.0	native
+88	cl2138	Chinese	Mandarin	0	17.0	native
+89	jl2140	Japanese		0	18.0	native
+89	jl2140	French		12	3.0	intermediate
+90	sl2141	Spanish	Peru	0	21.0	native
+90	sl2141	Portuguese		18	2.0	advanced
+90	sl2141	German		18	1.0	intermediate
+91	sl2143	Spanish	El Salvador	0	18.0	native
+91	sl2143	French		15	3.0	intermediate
+91	sl2143	Nahuatl		14	2.0	beginner
+92	pl2250	Portuguese	Brazil	0	41.0	native
+92	pl2250	Spanish		16	4.0	intermediate
+93	cl2146	Chinese	Mandarin	0	18.0	native
+93	cl2146	French		16	2.0	intermediate
+94	jl2258	Japanese		0	38.0	native
+95	cl2147	Chinese	Mandarin	0	26.0	native
+96	cl2149	Chinese	Mandarin	0	17.0	native
+96	cl2149	Latin		22	1.0	beginner
+97	sl2150	Catalan	Spain	0	30.0	native
+97	sl2150	Spanish	Spain	0	30.0	native
+97	sl2150	Italian		22	1.0	advanced
+97	sl2150	French		13	4.0	intermediate
+97	sl2150	Galician		25	4.0	intermediate
+98	jl2151	Japanese		0	20.0	native
+99	sl2152	Spanish	Spain	0	27.0	native
+100	cl2153	Chinese		0	23.0	native
+101	sl2155	Spanish		0	23.0	native
+101	sl2155	French		12	5.0	advanced
+102	sl2263	Spanish		0	42.0	native
+102	sl2263	French		16	10.0	advanced
+102	sl2263	Italian		20	15.0	advanced
+102	sl2263	Galician		4	38.0	intermediate
+102	sl2263	German		18	5.0	intermediate
+103	sl2157	Spanish		0	23.0	native
+103	sl2157	Portuguese		22	1.0	intermediate
+104	pl2252	Portuguese		0	33.0	native
+104	pl2252	French		25	2.0	intermediate
+105	sl2161	Spanish	Spain	3	16.0	native
+106	jl2163	Japanese		0	18.0	native
+107	jl2164	Japanese		0	20.0	native
+108	sl2165	Japanese		0	19.0	native
+109	sl2166	Portuguese		0	23.0	native
+109	sl2166	French		16	7.0	intermediate
+110	jl2167	Japanese		0	19.0	native
+111	jl2168	Japanese		0	19.0	native
+112	jl2170	Japanese		0	20.0	native
+112	jl2170	Spanish		20	1.0	beginner
+113	sl2171	Catalan	Spain	0	24.0	native
+113	sl2171	Spanish	Spain	0	24.0	native
+114	jl2172	Japanese		0	19.0	native
+115	cl2173	Chinese	Mandarin	0	29.0	native
+116	sl2174	Spanish	Venezuela	0	26.0	native
+117	cl2175	Chinese	Mandarin	0	27.0	native
+117	cl2175	Japanese		18	9.0	intermediate
+118	cl2176	Chinese	Mandarin	0	26.0	native
+120	cl2179	Chinese	Mandarin	0	23.0	native
+121	l192	Italian		16	4.0	intermediate
+121	l192	Spanish		12	5.0	intermediate
+121	l192	Hebrew		8	5.0	beginner
+122	l193	Spanish		11	9.0	advanced
+122	l193	Urdu		0	20.0	advanced
+123	sl2265	Spanish		0	45.0	native
+123	sl2265	Portuguese		30	15.0	beginner
+124	pl2255	Portuguese		0	18.0	native
+125	l196	Spanish		7	7.0	intermediate
+126	l197	French		11	4.0	intermediate
+127	l198	Lao		25	8.0	intermediate
+127	l198	Spanish		12	4.0	beginner
+127	l198	Thai		24	9.0	beginner
+128	l199					
+129	l1100	Spanish		13	22.0	advanced
+129	l1100	French		11	3.0	intermediate
+129	l1100	Arabic		1	4.0	beginner
+129	l1100	Portuguese		21	12.0	beginner
+130	l1101	Japanese		0	18.0	advanced
+131	l1102	Spanish		14	7.0	intermediate
+132	l1104	Spanish		6	10.0	advanced
+133	sl2181	Spanish	Mexico	0	29.0	native
+133	sl2181	French		0	10.0	advanced
+133	sl2181	Italian		20	5.0	advanced
+133	sl2181	Dutch		28	1.0	beginner
+133	sl2181	German		23	1.0	beginner
+133	sl2181	Greek		25	1.0	beginner
+134	l1105	Spanish		14	11.0	advanced
+135	l1106	French		12	4.0	beginner
+135	l1106	Spanish		18	15.0	beginner
+136	l1107	French		5	11.0	intermediate
+137	l1108	Chinese	Mandarin	0	19.0	intermediate
+137	l1108	French		14	4.0	beginner
+138	l1110	Chinese	Mandarin	15	4.0	beginner
+138	l1110	Spanish	Honduras	14	3.0	beginner
+139	l1111	Spanish		12	15.0	intermediate
+140	cl2182	Chinese	Mandarin	0	22.0	native
+141	sl2183	Spanish	Peru	0	19.0	native
+142	pl2184	Portuguese	Brazil	0	29.0	native
+142	pl2184	French		28	1.0	beginner
+143	jl2185	Japanese		0	40.0	native
+143	jl2185	Spanish		40	1.0	beginner
+144	sl2186	Spanish	Spain	0	53.0	native
+144	sl2186	French		7	8.0	advanced
+144	sl2186	German		19	3.0	intermediate
+144	sl2186	Italian		33	2.0	intermediate
+144	sl2186	Portuguese		36	1.0	beginner
+145	jl2187	Japanese		0	37.0	native
+146	sl2188	Spanish		0	44.0	native
+146	sl2188	French		25	5.0	intermediate
+147	jl2191	Japanese		0	34.0	native
+148	sl2259	Spanish	Spain	0	30.0	native
+148	sl2259	German		26	3.0	intermediate
+149	pl2194	Portuguese	Brazil	0	25.0	native
+150	pl2195	Portuguese	Brazil	0	30.0	native
+150	pl2195	Spanish		29	1.0	beginner
+151	pl2196	Portuguese	Brazil	0	25.0	native
+152	pl2197	Portuguese	Portugal	0	36.0	native
+152	pl2197	Spanish		16	10.0	beginner
+153	pl2198	Portuguese	Brazil	0	46.0	native
+153	pl2198	Spanish		18	15.0	intermediate
+153	pl2198	French		14	10.0	beginner
+154	cl2200	Chinese	Mandarin	2	28.0	native
+154	cl2200	Swedish		25	2.0	beginner
+155	jl2254	Japanese		0	23.0	native
+156	sl2256	Spanish		0	28.0	native
+157	pl2204	Portuguese	Portugal	0	35.0	native
+157	pl2204	Spanish		25	1.0	intermediate
+157	pl2204	French		12	2.0	beginner
+158	sl2205	Spanish		2	28.0	native
+159	cl2206	Chinese	Mandarin	0	23.0	native
+160	jl2208	Japanese		0	58.0	native
+160	jl2208	Chinese		30	1.0	beginner
+161	pl2209	Portuguese	Brazil	0	29.0	native
+162	jl2210	Japanese		0	21.0	native
+163	jl2211	Japanese		0	21.0	native
+164	pl2214	Portuguese	Brazil	0	28.0	native
+164	pl2214	Spanish		16	2.0	intermediate
+165	pl2215	Portuguese	Brazil	0	49.0	native
+165	pl2215	Spanish		36	12.0	intermediate
+166	cl2218	Chinese	Mandarin	0	27.0	native
+167	jl2219	Japanese		0	21.0	native
+168	jl2220	Japanese		0	19.0	native
+169	jl2257	Japanese		0	21.0	native
+170	jl2223	Japanese		0	21.0	native
+171	jl2224	Japanese		0	21.0	native
+172	jl2260	Japanese		0	20.0	native
+173	cl2226	Chinese		3	30.0	native
+174	jl2227	Japanese		13	1.0	native
+175	jl2228	Japanese		0	21.0	native
+176	sl2229	Spanish	Colombia	0	29.0	native
+176	sl2229	French		21	1.0	beginner
+177	sl2230	Spanish		0	28.0	native
+177	sl2230	Italian		22	1.0	beginner
+178	jl2231	Japanese		0	21.0	native
+179	jl2232	Japanese		0	23.0	native
+180	jl2234	Japanese		0	25.0	native
+181	jl2235	Japanese		0	32.0	native
+182	pl2236	Portuguese		0	24.0	native
+182	pl2236	Spanish		15	1.0	beginner
+183	pl2237	Portuguese		0	29.0	native
+183	pl2237	Italian		15	10.0	advanced
+184	pl2238	Portuguese	Brazil	0	26.0	native
+184	pl2238	Spanish		16	1.0	beginner
+185	185l2267	Spanish	Mexico	0	28.0	native
+186	186l2268	Spanish	Mexico	0	24.0	native
+187	187l2269	Spanish		0	34.0	native
+187	187l2269	Spanish Sign Language		32	2.0	beginner
+189	189l2271	Catalan	Spain	3	21.0	native
+189	189l2271	Spanish	Spain	4	20.0	advanced
+190	190l2272	Arabic	United Arab Emirates	0	20.0	native
+190	190l2272	Arabic	Egypt	0	20.0	native
+191	191l2273	Chinese	Mandarin	0	23.0	native
+191	191l2273	Chinese	Cantonese	0	23.0	native
+192	192l2274	Chinese	Mandarin	0	24.0	native
+193	193l2275	Spanish	Mexico	0	26.0	native
+194	194l2276	Spanish	Colombia	1	23.0	native
+195	195l2277	Spanish		0	23.0	native
+195	195l2277	French		21	1.0	beginner
+197	196l2278	Spanish		0	24.0	native
+199	199l2280	Spanish	Colombia	0	38.0	native
+199	199l2280	French		22	2.0	beginner
+200	200l2281	Spanish	Colombia	1	27.0	native
+202	202l2283	Chinese	Mandarin	0	33.0	native
+204	204l2285	Chinese	Mandarin	0	37.0	native
+204	204l2285	Japanese		21	2.0	beginner
+205	205l2286	Spanish		0	30.0	native
+206	206l2287	Spanish		0	26.0	native
+206	206l2287	Portuguese	Venezuela	18	4.0	intermediate
+207	207l2288	Arabic	Tunisia	0	23.0	native
+207	207l2288	French	France	8	15.0	advanced
+207	207l2288	German	Germany	16	7.0	intermediate
+208	208l2289	Japanese		0	38.0	native
+209	209l2290	Arabic		10	4.0	native
+210	210l2291	Chinese	Mandarin	0	21.0	native
+210	210l2291	Taiwanese	Taiwan	12	9.0	advanced
+211	211l2292	Portuguese	Brazil	0	36.0	native
+212	212l2293	Spanish		0	22.0	native
+212	212l2293	French		13	4.0	beginner
+213	213l2294	Chinese	Mandarin	8	14.0	native
+213	213l2294	Tibetan		6	13.0	native
+213	213l2294	Japanese		19	4.0	intermediate
+214	214l2295	Arabic	Morocco	0	22.0	native
+214	214l2295	French	Morocco	0	22.0	native
+214	214l2295	German	Germany	20	1.0	beginner
+215	215l2296	Portuguese	Brazil	0	28.0	native
+216	216l2297	Chinese	Mandarin	0	23.0	native
+216	216l2297	Taiwanese	Taiwan	20	3.0	intermediate
+217	217l2298	Arabic	Syria	8	1.0	native
+218	218l2299	Japanese		0	29.0	native
+219	219l2300	Japanese		0	28.0	native
+220	220l2301	Spanish	Venezuela	15	1.0	native
+221	221l2302	Chinese	Cantonese	0	19.0	native
+221	221l2302	Spanish	Mexico	13	5.0	intermediate
+222	222l2303	Portuguese	Brazil	0	23.0	native
+222	222l2303	Italian		20	3.0	beginner
+223	223l2304	Chinese	Mandarin	0	29.0	native
+224	224l2305	Chinese		0	26.0	native
+225	225l2306	Chinese	Mandarin	0	27.0	native
+226	226l2307	Arabic		0	31.0	native
+226	226l2307	German	Germany	5	25.0	intermediate
+227	227l2308	Chinese	Mandarin	0	23.0	native
+228	228l1119					
+229	229l2309	Portuguese	Brazil	0	28.0	native
+229	229l2309	Spanish		21	2.0	beginner
+231	231l1120					
+232	232l2311	Chinese	Mandarin	0	30.0	native
+233	233l2312	Chinese	Mandarin	0	23.0	native
+234	234l2313	Chinese	Mandarin	0	21.0	native
+234	234l2313	Korean	Korea	20	1.0	beginner
+235	235l1121					
+236	236l1122	Chinese	Mandarin	4	10.0	advanced
+236	236l1122	French	France	13	6.0	intermediate
+237	237l2314	Arabic	Lebanon	1	28.0	native
+237	237l2314	French		3	20.0	advanced
+238	238l1123	Spanish		12	11.0	intermediate
+239	239l1124	Spanish		13	8.0	intermediate
+240	240l1125	Spanish		14	14.0	advanced
+241	241l1126					
+242	242l1127	Spanish		10	14.0	advanced
+242	242l1127	Japanese		13	10.0	intermediate
+243	243l1128	Spanish		12	6.0	beginner
+244	244l1129					
+245	245l1130	German		19	3.0	beginner
+246	246l1131	Spanish		13	25.0	advanced
+246	246l1131	French	France	10	3.0	intermediate
+246	246l1131	Arabic	Jordan	0	6.0	beginner
+246	246l1131	Portuguese	Portugal	20	13.0	beginner
+248	248l1133					
+249	249l1134					
+250	250l1135					
+252	252l2316	Portuguese	Brazil	0	29.0	native
+253	253l2317	Japanese		0	34.0	native
+253	253l2317	French		30	3.0	intermediate
+254	254l2318	Arabic	Jordan	0	10.0	native
+254	254l2318	French	France	9	5.0	beginner
+256	256l2320	Portuguese	Brazil	0	29.0	native
+257	257l2321	Chinese	Cantonese	0	27.0	native
+257	257l2321	Chinese	Mandarin	0	24.0	native
+257	257l2321	Korean		26	1.0	beginner
+258	258l2322	Japanese		0	22.0	native
+258	258l2322	French	France	19	1.0	beginner
+259	259l2323	Japanese		0	28.0	native
+260	260l2324	Japanese		0	31.0	native
+261	261l2325	Japanese		0	29.0	native
+262	262l2326	Arabic	Saudi Arabia	0	21.0	native
+263	263l2327	Arabic		0	21.0	native
+263	263l2327	Spanish		19	2.0	intermediate
+264	264l2328	Japanese		0	29.0	native
+265	265l2329	Arabic	Saudi Arabia	0	25.0	native
+266	266l2330	Arabic		0	31.0	native
+266	266l2330	Turkish	Turkey	27	3.0	beginner
+267	267l2331	Portuguese		0	30.0	native
+267	267l2331	French		20	3.0	beginner
+267	267l2331	Spanish		25	5.0	beginner
+268	268l2332	Japanese		0	33.0	native
+269	269l2333	Portuguese	Brazil	0	26.0	native
+270	270l2334	Portuguese		0	25.0	native
+271	271l2335	Arabic		0	30.0	native
+272	272l2336	Portuguese		0	23.0	native
+273	273l2337	Japanese		0	32.0	native
+274	274l2338	Japanese		0	33.0	native
+275	275l1138	Spanish	USA	13	4.0	beginner
+276	276l2339	Arabic	Iraq	0	44.0	native
+277	277l1137	Spanish		0	25.0	beginner
+278	278l1139	Spanish		8	6.0	intermediate
+279	279l1140					
+280	280l2340	Arabic	Saudi Arabia	0	33.0	native
+281	281l1141	Spanish		10	10.0	beginner
+282	282l1142					
+283	283l1143	American Sign Language		22	5.0	advanced
+284	284l2341	Japanese		0	40.0	native
+285	285l2342	Japanese		1	20.0	native
+287	287l2343	Japanese		0	25.0	native
+287	287l2343	Chinese		18	4.0	beginner
+288	288l2344	Spanish	Spain	0	22.0	native
+289	289l2345	Japanese		0	20.0	native
+290	290l2346	Spanish	Spain	0	20.0	native
+290	290l2346	French		19	1.0	beginner
+291	291l2347	Spanish		0	26.0	native
+292	292l2348	Spanish	Spain	0	20.0	native
+292	292l2348	French		14	6.0	intermediate
+292	292l2348	German		16	2.0	beginner
+293	293l2349	Japanese		0	34.0	native
+294	294l2350	Portuguese	Brazil	0	24.0	native
+295	295l2351	Chinese	Mandarin	0	26.0	native
+296	296l2352	Chinese	Mandarin	0	34.0	native
+297	297l2353	Chinese		0	26.0	native
+298	298l2354	Chinese		0	28.0	native
+299	299l2355	Chinese	Mandarin	0	24.0	native
+300	300l2356	Chinese		0	28.0	native
+301	301l2357	Chinese		12	29.0	native
+301	301l2357	French		24	3.0	beginner
+302	302l2358	Chinese	Mandarin	0	25.0	native
+303	303l2359	Chinese		0	23.0	native
+304	304l2360	Chinese	Mandarin	0	30.0	native
+305	305l2361	Japanese		0	37.0	native
+306	306l2362	Japanese		0	33.0	native
+307	307l2363	Japanese		0	30.0	native
+308	308l2364	Chinese		0	40.0	native
+308	308l2364	Japanese		20	3.0	intermediate
+309	309l2365	Japanese		0	33.0	native
+310	310l2366	Chinese	Mandarin	0	30.0	native
+311	311l2367	Chinese	Mandarin	0	38.0	native
+312	312l2368	Japanese		0	34.0	native
+313	313l2369	Japanese		0	27.0	native
+314	314l2370	Portuguese		0	24.0	native
+314	314l2370	Spanish		23	1.0	beginner
+316	316l2372	Spanish	Mexico	0	18.0	native
+317	317l2373	Spanish	Peru	0	18.0	native
+318	318l2374	Chinese	Mandarin	0	23.0	native
+320	320l2376	Spanish	Venezuela	0	18.0	native
+321	321l2377	Spanish	Spain	0	26.0	native
+321	321l2377	Catalan	Spain	8	10.0	advanced
+322	322l2378	Arabic	Oman	0	30.0	native
+322	322l2378	Spanish		28	2.0	intermediate
+323	323l2379	Arabic		15	30.0	native
+325	325l2381	Spanish	Colombia	0	33.0	native
+325	325l2381	French		18	2.0	beginner
+326	326ls382	Arabic	Kuwait	0	23.0	native
+327	327l2383	Spanish		0	25.0	native
+328	328l2384	Spanish		3	5.0	native
+328	328l2384	French		25	1.0	intermediate
+329	329l2385	Spanish		0	34.0	native
+330	330l2386	Portuguese		0	26.0	native
+332	332l2388	Spanish	Colombia	9	1.0	native
+333	333l2389	Japanese		0	25.0	native
+334	334l2390	Spanish	Colombia	0	26.0	native
+334	334l2390	French		16	8.0	intermediate
+335	335l2391	Japanese		0	39.0	native
+336	336l2392	Portuguese		0	28.0	native
+338	338l2394	Spanish		0	27.0	native
+340	340l2396	Japanese		0	31.0	native
+341	341l2397	Portuguese	Portugal	0	23.0	native
+342	342l2398	Portuguese		0	25.0	native
+342	342l2398	French		13	7.0	advanced
+342	342l2398	German		7	11.0	advanced
+343	343l2399	Portuguese	Brazil	0	27.0	native
+343	343l2399	Spanish		19	2.0	intermediate
+343	343l2399	French		18	2.0	beginner
+344	344l2400	Portuguese		0	25.0	native
+344	344l2400	Spanish		20	2.0	intermediate
+344	344l2400	French		14	3.0	beginner
+345	345l2401	Portuguese	Brazil	0	28.0	native
+345	345l2401	French	France	18	8.0	advanced
+345	345l2401	Spanish	Spain	23	5.0	advanced
+346	346l2402	Portuguese	Brazil	0	25.0	native
+346	346l2402	Spanish		23	2.0	intermediate
+347	347l2403	Portuguese	Brazil	0	29.0	native
+347	347l2403	Spanish	Chile	14	7.0	advanced
+347	347l2403	German	Germany	10	7.0	intermediate
+347	347l2403	Italian	Italy	19	1.0	intermediate
+348	348l2404	Arabic	Sudan	0	18.0	native
+348	348l2404	Japanese		17	1.0	beginner
+350	350l2406	Portuguese	Brazil	0	33.0	native
+350	350l2406	Spanish	Brazil	18	12.0	intermediate
+351	351ls407	Arabic	Egypt	4	28.0	native
+352	352l2408	Portuguese	Brazil	0	26.0	native
+352	352l2408	Chinese	Mandarin	25	1.0	beginner
+353	353l2409	Portuguese		0	22.0	native
+353	353l2409	Spanish		13	3.0	beginner
+354	354l2410	Japanese		0	33.0	native
+355	355l2411	Japanese		3	20.0	native
+355	355l2411	Chinese	Mandarin	19	1.0	beginner
+356	356l2412	Chinese		0	30.0	native
+357	357l2413	Chinese	Mandarin	1	30.0	native
+358	358l2414	Japanese		0	34.0	native
+359	359l2415	Japanese		0	26.0	native
+359	359l2415	Spanish	Spain	18	8.0	beginner
+360	360l2416	Chinese	Mandarin	0	28.0	native
+361	361l2417	Chinese	Mandarin	0	27.0	native
+362	362l2418	Japanese		0	41.0	native
+362	362l2418	Polish	Poland	28	1.0	beginner
+363	363l2419	Arabic	Saudi Arabia	0	21.0	native
+363	363l2419	Japanese		19	2.0	beginner
+364	364l2420	Arabic	Saudi Arabia	0	19.0	native
+364	364l2420	Turkish	Turkey	11	5.0	beginner
+365	365l2421	Spanish	Venezuela	0	32.0	native
+366	366l2422	Spanish	Chile	0	39.0	native
+367	367l2423	Chinese	Mandarin	0	27.0	native
+367	367l2423	Japanese		22	1.0	beginner
+368	368l1424	German	Germany	15	2.0	beginner
+369	369l1445	Spanish		12	30.0	advanced
+369	369l1445	French		11	3.0	intermediate
+369	369l1445	Portuguese		22	10.0	beginner
+370	370l2446	Japanese		0	28.0	native
+371	371l1427	Spanish		15	15.0	intermediate
+371	371l1427	French		11	2.0	beginner
+372	372l1431					
+373	373l2446	Japanese		0	36.0	native
+373	373l2446	French	France	32	1.0	beginner
+374	374l2445	Portuguese	Brazil	0	28.0	native
+375	375l1434	Spanish		5	16.0	advanced
+376	376l2435	Portuguese	Brazil	0	36.0	native
+377	377l2436	Japanese		0	36.0	native
+378	378l2437	Arabic		1	23.0	native
+379	379l2438	Portuguese	Brazil	0	34.0	native
+380	380l1439	Tagalog		0	20.0	intermediate
+381	381l2440	Japanese		0	21.0	native
+382	382l1441					
+383	383l1442					
+384	384l1443					

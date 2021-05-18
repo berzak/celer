@@ -58,7 +58,7 @@ SR DataViewer Interest Area and Fixation Reports, and syntactic annotations.
 **`participant_metadata/`**
 
 - `metadata.tsv` metadata on participants.
-
+- `languages.tsv` information on languages spoken besides English.
 - `test_scores/`
     - `test_conversion.tsv` unofficial conversion table between standardized proficiency tests (used to convert TOEIC to TOEFL scores).  
     - `michigan/` Item level responses for the Michigan Placement Test (MPT).   
@@ -91,8 +91,8 @@ Note that this script requires:
 </a>
 
 - [Eyetracking Variables](documentation/data_variables.md) Description of the variables in the fixations and interest area reports.
-- [Metadata Variables](documentation/metadata_variables.md) Description of the variables in the participants metadata file.
-- [Language Models](documentation/language_models.md) Details on langugae models for surprisal values.
+- [Metadata Variables](documentation/metadata_variables.md) Description of the variables in the participants metadata and languages files.
+- [Language Models](documentation/language_models.md) Details on language models for surprisal values.
 - [Syntactic Annotations](documentation/syntactic_annotations.md) Details on syntactic annotations (POS, phrase structure trees, dependency trees).
 - [GECO Augmented](documentation/geco_augmented.md) Details on new fields added to GECO.
 - [Experiment Builder Programs](documentation/EB_programs.md) Information on the EB experiment.

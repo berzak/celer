@@ -1,7 +1,7 @@
 **`participant_metadata/`**
 
 - `metadata.tsv` Several missing values for Gender and Age.
-- `test_scores/michigan/item-scores-MichiganLG` 5 missing values for MichiganLG answers (counted as incorrect answers). These occured at an early stage of the data collection when it was possible to submit the test without answering all the questions.
+- `test_scores/michigan/item-scores-MichiganLG` 5 missing values for MichiganLG answers (counted as incorrect answers). These occurred at an early stage of the data collection when it was possible to submit the test without answering all the questions.
 
 **Eye-tracking data issues**
 
@@ -32,8 +32,8 @@
     - list 305 trial 28
     - list 308 trial 153
     
-- Differently from the PTB sentences which are available in raw form, BLLIP materials had to be detokenized. This was done heuristicaly and resulted in seveal issues:
-    - "'d" apppearing as a separate token (e.g. "I 'd" instead of "I'd"). 66 cases.
+- Differently from the PTB sentences which are available in raw form, BLLIP materials had to be detokenized. This was done heuristically and resulted in several issues:
+    - "'d" appearing as a separate token (e.g. "I 'd" instead of "I'd"). 66 cases.
     - "cann't" instead of "can't". 1249 cases.
     - opening single quotes are attached to the preceding word (e.g. "It's called' eyetracking'.", instead of "It's called 'eyetracking'.")
 

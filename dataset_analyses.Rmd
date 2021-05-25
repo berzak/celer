@@ -1,4 +1,4 @@
-Analyses for the paper: "A 365 Participants Corpus of Eye Movements in Learner and Native English Reading"
+Analyses for the paper: "A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading"
 
 Before running this script please obtain the data as follows:
 
@@ -11,6 +11,10 @@ CELER:
 GECO:
 Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory
 https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing
+
+The script uses Julia MixedModels library. Install Julia here https://julialang.org/downloads/, then open Julia and install the required libraries RCall and MixedModels:
+Pkg.add("RCall")
+Pkg.add("MixedModels")
 
 ```{r}
 set.seed(214)
@@ -26,6 +30,16 @@ library(JuliaCall)
 
 j<-julia_setup()
 j$library("MixedModels")
+
+#Settings for frequency and surprisal. Frequency FREQ_SUBTLEX / FREQ_BLLIP / FREQ_WEB. Surprisal SURP_GPT2 / SURP_LSTM / SURP_KENLM. For GECO, only GPT2 is currently available.
+#CELER
+FREQ_CELER = "FREQ_SUBTLEX"
+OOV_CELER = "OOV_SUBTLEX"
+SURP_CELER = "SURP_GPT2"
+#GECO
+FREQ_GECO = "FREQ_SUBTLEX"
+OOV_GECO = "OOV_SUBTLEX"
+SURP_GECO = "SURP_GPT2"
 ```
 
 Load CELER and GECO metadata and Plot basic participant stats
@@ -60,19 +74,12 @@ p <- ggplot() +
 p
 ```
 
-```{r}
-#fromJSON(celer_metadata$Languages[3])
-table(celer_metadata$Gender)
-```
-
 
 ```{r}
 code_vars <- function(report){
-    report$L2_01 <- ifelse(report$English == "L2", 1, 0)
-    report$L2_05 <- ifelse(report$English == "L2", 0.5, -0.5)
-    report$L2_11 <- ifelse(report$English == "L2", 1, -1)
+    report$English_01 <- ifelse(report$English == "L2", 1, 0)
+    report$English_05 <- ifelse(report$English == "L2", 0.5, -0.5)
     report$DATASET_05 <- ifelse(report$DATASET == "CELER", 0.5, -0.5)
-
     return(report)
 }
 ```
@@ -82,39 +89,39 @@ Load GECO
 geco_ia_l2 <- read_xlsx("geco/L2ReadingDataAugmented.xlsx", na = c("", ".")) 
 geco_ia_l1 <- read_xlsx("geco/MonolingualReadingDataAugmented.xlsx", na = c("", "."))
 geco_ia <- bind_rows(geco_ia_l1, geco_ia_l2) %>% 
-           mutate(GROUP = as.factor(GROUP),
+           mutate(DATASET = as.factor("GECO"),
+                  GROUP = as.factor(GROUP),
                   PP_NR = as.factor(PP_NR),
                   WORD_ID = as.factor(WORD_ID),
                   WORD_NORM = as.factor(WORD_NORM),
                   LANGUAGE_RANK = as.factor(LANGUAGE_RANK),
-                  #WORD_TOTAL_READING_TIME = ifelse(is.na(WORD_TOTAL_READING_TIME), 0, WORD_TOTAL_READING_TIME),
                   FREQ_BLLIP = as.double(FREQ_BLLIP),
                   FREQ_WEB = as.double(FREQ_WEB),
                   FREQ_SUBTLEX = as.double(FREQ_SUBTLEX)) %>% 
+           #set default frequency and surprisal
+           mutate_("FREQUENCY" = FREQ_GECO, 
+                  "OOV" = OOV_GECO,
+                  "SURPRISAL" = SURP_GECO) %>%
            rename(SUBJECT = PP_NR,
                   English = LANGUAGE_RANK,
                   FIRST_FIXATION = WORD_FIRST_FIXATION_DURATION,
                   GAZE_DURATION = WORD_GAZE_DURATION,
                   TOTAL_FIXATION = WORD_TOTAL_READING_TIME,
                   AVERAGE_FIX_PUPIL_SIZE = WORD_AVERAGE_FIX_PUPIL_SIZE,
-                  FIXATION_COUNT = WORD_FIXATION_COUNT,
-                  SKIP = WORD_SKIP) %>% 
-           mutate(FREQUENCY = FREQ_SUBTLEX, #set default frequency to SUBTLEX
-                  OOV = OOV_SUBTLEX,
-                  SURPRISAL = SURP_GPT2,
-                  # previous word properties
+                  FIXATION_COUNT = WORD_FIXATION_COUNT) %>% #SKIP = WORD_SKIP 
+           mutate(# previous word properties
                   SURPRISAL_prev1 = lag(SURPRISAL),
                   FREQUENCY_prev1 = lag(FREQUENCY),
                   WORD_LEN_prev1 = lag(WORD_LEN),
                   OOV_prev1 = lag(OOV),
-                  #WORD_LEN = nchar(IA_LABEL), #This is precomputed excluding punctuation
-                  shared_text = 1,
-                  DATASET = "GECO") %>%    
+                  # Note: default WORD_SKIP in GECO is for first pass
+                  SKIP = ifelse(is.na(TOTAL_FIXATION),1,0),
+                  # all GECO participants read the same text
+                  shared_text = 1) %>% 
           code_vars
 geco_ia_long <- gather(geco_ia, "fix_measure", "RT", 
                     c('FIRST_FIXATION', 'GAZE_DURATION', 'TOTAL_FIXATION', 'SKIP', 'FIXATION_COUNT'), factor_key = TRUE) 
 ```
-
 
 Load CELER Interest area report
 ```{r}
@@ -122,7 +129,6 @@ Load CELER Interest area report
 celer_ia <- read.table("data_v2.0/sent_ia.tsv", header = TRUE, quote = "", sep = "\t", na.strings = c("", ".")) 
 
 celer_ia <- celer_ia %>%
-                 #rename variables
                  rename(SUBJECT = list,
                         TRIAL = trial,
                         FIRST_FIXATION = IA_FIRST_FIXATION_DURATION,
@@ -131,28 +137,27 @@ celer_ia <- celer_ia %>%
                         SKIP = IA_SKIP,
                         FIXATION_COUNT = IA_FIXATION_COUNT,
                         WORD = IA_LABEL) %>%
-                 mutate(DATASET = "CELER",
-                        # set unfixated word reading times to 0
-                        #FIRST_FIXATION = as.integer(replace(as.character(FIRST_FIXATION), FIRST_FIXATION == ".", "0")),
-                        #GAZE_DURATION = as.integer(replace(as.character(GAZE_DURATION), GAZE_DURATION == ".", "0")),
+                 # set default frequency and suprisal
+                 mutate_("FREQUENCY" = FREQ_CELER, 
+                        "OOV" = OOV_CELER,
+                        "SURPRISAL" = SURP_CELER) %>%
+                 mutate(DATASET = as.factor("CELER"),
+                        FREQ_BLLIP = as.double(FREQ_BLLIP),
+                        FREQ_WEB = as.double(FREQ_WEB),
+                        FREQ_SUBTLEX = as.double(FREQ_SUBTLEX),
+                        SUBJECT = as.factor(SUBJECT),
+                        WORD_ID = as.factor(paste(TRIAL, IA_ID, sep = "_")), #meaninful only for the shared regime
+                        WORD_NORM = as.factor(WORD_NORM),    
+                        WORD = as.character(WORD),
+                        # set Total Fixation to be undefined for skipped words
                         TOTAL_FIXATION = na_if(TOTAL_FIXATION, 0),
-                        # set default frequency and suprisal
-                        SURPRISAL = SURP_GPT2,
-                        FREQUENCY = FREQ_SUBTLEX, 
-                        OOV = OOV_SUBTLEX,
                         # previous word properties
                         SURPRISAL_prev1 = lag(SURPRISAL),
                         FREQUENCY_prev1 = lag(FREQUENCY),
                         WORD_LEN_prev1 = lag(WORD_LEN),
-                        OOV_prev1 = lag(OOV),
-                        # subjects and words as factors
-                        SUBJECT = as.factor(SUBJECT),
-                        WORD_ID = as.factor(paste(TRIAL, IA_ID, sep = "_")), #meaninfull only for the shared regime
-                        WORD_NORM = as.factor(WORD_NORM),    
-                        WORD = as.character(WORD),
-                        dataset_version = as.factor(dataset_version),
-                        # add L1 and proficiency information form metadata
-                        MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
+                        OOV_prev1 = lag(OOV)) %>%
+                # add L1 and proficiency information form metadata
+                 mutate(MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
                         L1 = unlist(map(SUBJECT, function(x){celer_metadata[toString(x),"L1"]})),
                         English = as.factor(ifelse(L1 == "English", "L1", "L2"))) %>% 
                  code_vars
@@ -172,39 +177,37 @@ CHARS_PER_ANGLE = 1/mean_char_visual_degrees
 
 
 Load CELER Fixation report
-
 ```{r}
 #Load Fixation report
 celer_fix <- read.table("data_v2.0/sent_fix.tsv", header = TRUE, quote = "", sep = "\t", stringsAsFactors = FALSE) 
 
 celer_fix <- celer_fix %>%
-                  #filter out saccades to and from locations that outside the text area
-                  filter(NEXT_SAC_AMPLITUDE != '.', 
-                         CURRENT_FIX_INTEREST_AREA_ID != '.') %>% 
                   rename(SUBJECT = list,
                          TRIAL = trial) %>%
-                  # add L1 and proficiency information form metadata
-                  mutate(MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
-                         L1 = unlist(map(SUBJECT, function(x){celer_metadata[toString(x),"L1"]})),
-                         English = as.factor(ifelse(L1 == "English", "L1", "L2"))) %>% 
-                  mutate(DATASET = "CELER",
-                         #set default frequency and surprisal
-                         SURPRISAL = SURP_GPT2,
-                         FREQUENCY = FREQ_BLLIP, 
-                         OOV = OOV_BLLIP, 
+                  # filter out saccades to and from locations that are outside the text area
+                  filter(NEXT_SAC_AMPLITUDE != '.', 
+                         CURRENT_FIX_INTEREST_AREA_ID != '.') %>% 
+                  # set default frequency and suprisal
+                  mutate_("FREQUENCY" = FREQ_CELER, 
+                        "OOV" = OOV_CELER,
+                        "SURPRISAL" = SURP_CELER) %>%
+                  mutate(DATASET = as.factor("CELER"),
+                         SUBJECT = as.factor(SUBJECT),
+                         WORD_ID = as.factor(paste(TRIAL, CURRENT_FIX_INTEREST_AREA_ID, sep = "_")),
+                         WORD_NORM = as.factor(WORD_NORM),
+                         NEXT_SAC_AMPLITUDE = as.double(NEXT_SAC_AMPLITUDE)*CHARS_PER_ANGLE,
+                         NEXT_SAC_AVG_VELOCITY = as.double(NEXT_SAC_AVG_VELOCITY)*CHARS_PER_ANGLE,
                          # previous word properties
                          SURPRISAL_prev1 = lag(SURPRISAL),
                          FREQUENCY_prev1 = lag(FREQUENCY),
                          WORD_LEN_prev1 = lag(WORD_LEN),
                          OOV_prev1 = lag(OOV),
-                         SUBJECT = as.factor(SUBJECT),
-                         WORD_ID = as.factor(paste(TRIAL, CURRENT_FIX_INTEREST_AREA_ID, sep = "_")),
-                         WORD_NORM = as.factor(WORD_NORM),    #WORD = as.character(WORD),
-                         REGRESSION = ifelse(NEXT_SAC_DIRECTION == "LEFT", 1, 0),
-                         NEXT_SAC_AMPLITUDE = as.double(NEXT_SAC_AMPLITUDE)*CHARS_PER_ANGLE,
-                         NEXT_SAC_AVG_VELOCITY = as.double(NEXT_SAC_AVG_VELOCITY)*CHARS_PER_ANGLE)%>%                   
-                  code_vars  
-
+                         REGRESSION = ifelse(NEXT_SAC_DIRECTION == "LEFT", 1, 0)) %>%
+                  # add L1 and proficiency information form metadata
+                  mutate(MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
+                         L1 = unlist(map(SUBJECT, function(x){celer_metadata[toString(x),"L1"]})),
+                         English = as.factor(ifelse(L1 == "English", "L1", "L2"))) %>% 
+                  code_vars
 
 celer_fix_long <- gather(celer_fix, "fix_measure", "RT", 
                          c("CURRENT_FIX_DURATION", "NEXT_SAC_AMPLITUDE", "NEXT_SAC_AVG_VELOCITY", "REGRESSION"), factor_key = TRUE) 
@@ -214,9 +217,8 @@ TODO?: can also filter NEXT_FIX_INTEREST_AREA_ID != '.' to exclude saccades that
 Preprocess data
 ```{r}
 filter_words <- function(df){
-      df_filtered <- df %>% #first and last words
-                            group_by(SUBJECT, TRIAL) %>% 
-                            slice(2:(n()-1)) %>% ungroup() %>% 
+      df_filtered <- df %>% group_by(SUBJECT, TRIAL) %>% 
+                            slice(2:(n()-1)) %>% ungroup() %>% #first and last words
                             filter(!grepl("NUM", WORD_NORM), #numbers
                                    !grepl('^[[:punct:]]|[[:punct:]]$', WORD), #words with punctuation
                                    OOV == 0, OOV_prev1 == 0, #out of vocabulary words
@@ -243,100 +245,61 @@ geco_ia_oov_long <- gather(geco_ia_oov, "fix_measure", "RT",
                         c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION"))
 ```
 
-Mixed Effects models in Julia
-```{r}
-get_fixed_effects_julia <- function(report, mx_formula){
-    julia_assign("report", report)
-    julia_assign("formula", formula(mx_formula))
-    result <- julia_eval("m1 = coeftable(fit(LinearMixedModel, formula, report))")
-    return(result)
-}
-```
-
 Table 2: Benchmarks for standard fixation measures for L1 and L2 on CELER and GECO
 ```{r}
+#L1 and L2 means
 mean_lmer <- function(report){
   shared_text = unique(report$shared_text)
   dataset = unique(report$DATASET)
-  if (dataset == "GECO"){
-      print(paste("GECO", unique(report$fix_measure), unique(report$English)))
-      se = as_tibble(coef(summary(lmer(RT ~ 1 + (1 |SUBJECT), #+ (1|WORD_ID) 
-                                       control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data = report))))
-  }else{
-      print(paste("CELER", unique(report$fix_measure), unique(report$English)))
-      se = as_tibble(coef(summary(lmer(RT ~ 1 + (1 |SUBJECT),
-                                       control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE),data = report))))
-  }
+  print(paste(dataset, unique(report$fix_measure), unique(report$English)))
+  se = as_tibble(coef(summary(lmer(RT ~ 1 + (1 |SUBJECT), #+ (1|WORD_ID) 
+                                     control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data = report))))
   se <- se %>% mutate(CI = `Std. Error`*1.96)
   return(se)    
 }
 
+#L1 vs L2 difference
 run_lmer <- function(report){
   shared_text = unique(report$shared_text)
   measure = unique(report$fix_measure)
   dataset = unique(report$DATASET)
-  print(dataset)
   if ((measure == "SKIP")|(measure == "REGRESSION")){
-      if (dataset == "GECO"){
-          print(paste("MODEL logistic", "GECO", measure))
-          m <- glmer(RT ~ L2_01 + (1 |SUBJECT), family = binomial(), # + (L2_01|WORD_ID)
-                     control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-      }else{
-          print(paste("MODEL logistic", "CELER", measure))
-          m <- glmer(RT ~ L2_01 + (1 |SUBJECT), family = binomial(), 
-                     control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-      }
+      print(paste("MODEL logistic", dataset, measure))
+      m <- glmer(RT ~ English_01 + (1 |SUBJECT), family = binomial(),
+                      control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
   } else if (measure == "FIXATION_COUNT"){
-      if (dataset == "GECO"){
-          print(paste("MODEL poisson", "GECO", measure))
-          m <- glmer(RT ~ L2_01 + (1 |SUBJECT), family = poisson(), # + (L2_01|WORD_ID)
+      print(paste("MODEL poisson", dataset, measure))
+      m <- glmer(RT ~ English_01 + (1 |SUBJECT), family = poisson(),
+                      control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
+  }
+  else {
+      print(paste("MODEL regression", dataset, measure))
+      m <- lmer(RT ~ English_01 + (1 |SUBJECT), 
                      control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-      }else{
-          print(paste("MODEL poisson", "CELER", measure))
-          m <- glmer(RT ~ L2_01 + (1 |SUBJECT), family = poisson(), # 
-                     control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-
-      }
-    }
-  else{
-      if (dataset == "GECO"){
-          print(paste("MODEL regression", "GECO", measure))
-          m <- lmer(RT ~ L2_01 + (1 |SUBJECT), # + (L2_01|WORD_ID) 
-                    control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-      }else{
-          print(paste("MODEL regression", "CELER", measure))
-          m <- lmer(RT ~ L2_01 + (1 |SUBJECT), 
-                    control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
-      }
     }
   fixed_effects <- data.frame(summary(m)$coefficients)
   return(fixed_effects)
 }
 
+#L1/L2 -- CELER/GECO interaction
 run_lmer_geco_celer_interaction <- function(report){
   measure = unique(report$fix_measure)
   if ((measure == "SKIP")|(measure == "REGRESSION")){
       print(paste("MODEL logistic", measure))
-      m <- glmer(RT ~ L2_05*DATASET_05 + (1 |SUBJECT), family = binomial(), control=glmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
+      m <- glmer(RT ~ English_05*DATASET_05 + (1 |SUBJECT), family = binomial(), control=glmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
   } else if (measure == "FIXATION_COUNT"){
       print(paste("MODEL poisson", measure))
-      m <- glmer(RT ~ L2_05*DATASET_05 + (1 |SUBJECT), family = poisson(), control=glmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
+      m <- glmer(RT ~ English_05*DATASET_05 + (1 |SUBJECT), family = poisson(), control=glmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
     }
   else{
       print(paste("MODEL regression", measure))
-      m <- lmer(RT ~ L2_05*DATASET_05 + (1 |SUBJECT), control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
+      m <- lmer(RT ~ English_05*DATASET_05 + (1 |SUBJECT), control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=report)
     }
   fixed_effects <- data.frame(cbind(Coef = rownames(summary(m)$coefficients), summary(m)$coefficients))
   return(fixed_effects)
 }
 ```
 
-
-```{r}
-combined = bind_rows(celer_ia_long, geco_ia_long)
-intercation_English_dataset <-  combined %>% group_by(fix_measure) %>% do(run_lmer_geco_celer_interaction(.))
-intercation_English_dataset
-```
 
 ```{r}
 means_ia_celer <- celer_ia_long %>% group_by(fix_measure, English) %>% do(mean_lmer(.))
@@ -347,6 +310,7 @@ tests_ia_celer <- celer_ia_long %>% group_by(fix_measure) %>% do(run_lmer(.))
 means_ia_celer  %>% mutate_if(is.numeric, round, digits=5)
 tests_ia_celer  %>% mutate_if(is.numeric, round, digits=5)
 ```
+
 ```{r}
 means_ia_geco <- geco_ia_long %>% group_by(fix_measure, English) %>% do(mean_lmer(.))
 tests_ia_geco <- geco_ia_long %>% group_by(fix_measure) %>% do(run_lmer(.))
@@ -357,6 +321,12 @@ means_ia_geco  %>% mutate_if(is.numeric, round, digits=5)
 tests_ia_geco  %>% mutate_if(is.numeric, round, digits=5)
 ```
 
+L1/L2 -- GECO/CELER interaction
+```{r}
+combined = bind_rows(celer_ia_long, geco_ia_long)
+intercation_English_dataset <-  combined %>% group_by(fix_measure) %>% do(run_lmer_geco_celer_interaction(.))
+intercation_English_dataset
+```
 
 ```{r}
 means_celer_fix <- celer_fix_long %>% group_by(fix_measure, English) %>% do(mean_lmer(.))
@@ -368,31 +338,42 @@ means_celer_fix %>% mutate_if(is.numeric, round, digits=2)
 tests_celer_fix %>% mutate_if(is.numeric, round, digits=2)
 ```
 
-
 ```{r}
 celer_fix <- celer_fix %>% mutate(NEXT_SAC_AMPLITUDE_c = NEXT_SAC_AMPLITUDE - mean(NEXT_SAC_AMPLITUDE))
-m_velocity <- lmer(NEXT_SAC_AVG_VELOCITY ~ L2_05*NEXT_SAC_AMPLITUDE_c + (1 |SUBJECT), 
+m_velocity <- lmer(NEXT_SAC_AVG_VELOCITY ~ English_05*NEXT_SAC_AMPLITUDE_c + (1 |SUBJECT), 
                    control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=celer_fix)
 summary(m_velocity)$coefficients
 ```
 
+
 Table 3: the effects of frequency, surprisal and word length on reading times (First Fixation, Gaze Duration, Total fixation)
 
+Mixed Effects models in Julia
 ```{r}
-report_all = bind_rows(geco_ia_oov_long, celer_ia_oov_long) %>% mutate_at(c("English", "SUBJECT", "DATASET"), as.factor) %>% mutate(DATASET_05 = ifelse(DATASET == "CELER", 0.5, -0.5))
+run_mixed_effects_julia <- function(report, mx_formula){
+    julia_assign("report", report)
+    julia_assign("formula", formula(mx_formula))
+    result <- julia_eval("fit(LinearMixedModel, formula, report)")
+    return(result)
+}
+```
+
+
+```{r}
+report_all = bind_rows(geco_ia_oov_long, celer_ia_oov_long)
 for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
       print(measure)
       formula1 = "RT ~ English/FREQUENCY_c + English/FREQUENCY_prev1_c + 
                        English/SURPRISAL_c + English/SURPRISAL_prev1_c +
                        English/WORD_LEN_c + English/WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c| SUBJECT)"
-      formula2 = "RT ~ L2_05*FREQUENCY_c + L2_05*FREQUENCY_prev1_c + 
-                       L2_05*SURPRISAL_c + L2_05*SURPRISAL_prev1_c + 
-                       L2_05*WORD_LEN_c + L2_05*WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"
-      formula3 = "RT ~ DATASET_05*L2_05*FREQUENCY_c + DATASET_05*L2_05*FREQUENCY_prev1_c + 
-                       DATASET_05*L2_05*SURPRISAL_c + DATASET_05*L2_05*SURPRISAL_prev1_c + 
-                       DATASET_05*L2_05*WORD_LEN_c + DATASET_05*L2_05*WORD_LEN_prev1_c + 
+                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c| SUBJECT)"# +(SURPRISAL_c|WORD_NORM)"
+      formula2 = "RT ~ English_05*FREQUENCY_c + English_05*FREQUENCY_prev1_c + 
+                       English_05*SURPRISAL_c + English_05*SURPRISAL_prev1_c + 
+                       English_05*WORD_LEN_c + English_05*WORD_LEN_prev1_c + 
+                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"# +(SURPRISAL_c|WORD_NORM)"
+      formula3 = "RT ~ DATASET_05*English_05*FREQUENCY_c + DATASET_05*English_05*FREQUENCY_prev1_c + 
+                       DATASET_05*English_05*SURPRISAL_c + DATASET_05*English_05*SURPRISAL_prev1_c + 
+                       DATASET_05*English_05*WORD_LEN_c + DATASET_05*English_05*WORD_LEN_prev1_c + 
                        (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"
       formula4 = "RT ~ DATASET_05*FREQUENCY_c + DATASET_05*FREQUENCY_prev1_c + 
                        DATASET_05*SURPRISAL_c + DATASET_05*SURPRISAL_prev1_c + 
@@ -400,31 +381,32 @@ for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
                        (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"
       
       cat("CELER\n")
-      print(get_fixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula1))
+      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula1))
       cat("\n")
-      print(get_fixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula2))
+      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula2))
       cat("\n")
       cat("GECO\n")
-      print(get_fixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula1))
+      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula1))
       cat("\n")
-      print(get_fixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula2))
+      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula2))
       cat("\n")
       cat("CELER vs GECO\n")
-      print(get_fixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
       cat("\n")
       cat("CELER vs GECO L1\n")
-      print(get_fixed_effects_julia(filter(report_all, fix_measure == measure, English =="L1"), formula4))
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L1"), formula4))
       cat("\n")
       cat("CELER vs GECO L2\n")
-      print(get_fixed_effects_julia(filter(report_all, fix_measure == measure, English =="L2"), formula4))
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L2"), formula4))
       cat("\n")
 }
 ```
 
+
+
 Obtain random effects for separately for L1 and L2 in CELER and GECO
 
-```{r, fig.height=18,fig.width=24}
-normalize_coefs = TRUE
+```{r, fig.height=6,fig.width=8}
 
 get_random_effects_julia <- function(dataset, normalize = TRUE){
   print(paste(unique(dataset$DATASET), unique(dataset$English), unique(dataset$fix_measure)))
@@ -460,38 +442,31 @@ get_subject_effects <- function(dataset, normalize = TRUE){
     return(coefs_long)
 }
 
-plot_coefs <- function(data){
+plot_coefs <- function(data, bars, test){
   p <- ggplot() +
       theme_bw(base_size = 25) +
       geom_point(data = data, aes(x = coef, y = SUBJECT_COEFFICIENT, fill = DATASET), 
-              pch = 21, position = position_jitterdodge(dodge.width = 1), alpha = 0.3, size = 4) + 
-      geom_boxplot(data = data, aes(x = coef, SUBJECT_COEFFICIENT, fill = DATASET), width = 0.4, outlier.size = 0) +
+              pch = 21, position = position_jitterdodge(dodge.width = 1), alpha = 0.05, size = 4) + 
+      #geom_boxplot(data = data, aes(x = coef, SUBJECT_COEFFICIENT, fill = DATASET), width = 0.4, outlier.size = 0) +
+      geom_errorbar(data = bars, aes(x = coef, ymin = 0-std/2, ymax = 0+std/2, width = 0.3,   color = DATASET), size = 1, position = "dodge") +
+      geom_text(data = test, aes(x = coef, y = Inf, label=stars), vjust=1, size = 8, color = "black") +
       facet_wrap(English ~ fix_measure, scales = "free") + theme(aspect.ratio = 0.75) +
       theme(axis.title.x=element_blank())
   return(p)
 }
+```
+
+```{r,fig.height=6,fig.width=8}
+normalization = TRUE
 
 #subject_coefs <- bind_rows(geco_ia_oov_long, celer_ia_oov_long) %>% group_by(DATASET, English, fix_measure) %>% do(get_subject_effects(., normalize=normalize_coefs)) %>% ungroup()
-subject_ranefs <- bind_rows(geco_ia_oov_long, celer_ia_oov_long) %>% group_by(DATASET, English, fix_measure) %>% do(get_random_effects_julia(., normalize=normalize_coefs)) %>% ungroup()
-#p_coefs <- plot_coefs(subject_coefs)
-p_ranefs <- plot_coefs(subject_ranefs)
+subject_ranefs <- bind_rows(geco_ia_oov_long, celer_ia_oov_long) %>% group_by(DATASET, English, fix_measure) %>% do(get_random_effects_julia(., normalize=normalization)) %>% ungroup()
+bars <- subject_ranefs %>% group_by(DATASET, English, fix_measure, coef) %>% summarise(std = sd(SUBJECT_COEFFICIENT)) %>% ungroup()
+test <- subject_ranefs %>% group_by(English, fix_measure, coef) %>% 
+                           summarise(levene = leveneTest(SUBJECT_COEFFICIENT ~ DATASET, center = mean)$`Pr(>F)`[1]) %>%  
+                           mutate(stars = symnum(levene, corr = FALSE, na = FALSE, cutpoints = c(0,0.001,0.01,0.05,1), symbols = c("***","**","*","(.)")))
+p_ranefs <- plot_coefs(subject_ranefs, bars, test)
+ggsave(file=paste("dataset_analyses_figures/coefs-rand-norm_",normalization,".pdf", sep=""), height=18,width=24, p_ranefs)
 
-#ggsave(file=paste("dataset_analyses_figures/coefs-norm_", "TOTAL_FIXATION-", as.symbol(normalize_coefs),".pdf", sep = ""), p_ranefs)#height=20,width=24,
-ggsave(file=paste("dataset_analyses_figures/coefs-rand-norm_", as.symbol(normalize_coefs),".pdf", sep = ""), height=18,width=24, p_ranefs)
-
-
-#print(p_coefs)
 print(p_ranefs)
-
-```
-```{r}
-subject_coefs
-```
-
-Test for difference in variances between CELER and GECO (dradt)
-```{r}
-int_coefs <- coefs_all %>% filter(coef == "SURP_GPT2", English == "L2")
-#test = var.test(random_to_fixed_ratio ~ DATASET, data = int_coefs)
-test = leveneTest(random_to_fixed_ratio ~ DATASET, data = int_coefs, center = mean)
-test
 ```

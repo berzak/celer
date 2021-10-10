@@ -114,6 +114,10 @@ geco_ia <- bind_rows(geco_ia_l1, geco_ia_l2) %>%
                   FREQUENCY_prev1 = lag(FREQUENCY),
                   WORD_LEN_prev1 = lag(WORD_LEN),
                   OOV_prev1 = lag(OOV),
+                  WORD_NORM_prev1 = lag(WORD_NORM),
+                  WORD_ID_prev1 = lag(WORD_ID),
+                  # Note: for some reason skipped words TOTAL FIXATION is sometimes NaN and sometimes 0
+                  TOTAL_FIXATION = na_if(TOTAL_FIXATION, 0),
                   # Note: default WORD_SKIP in GECO is for first pass
                   SKIP = ifelse(is.na(TOTAL_FIXATION),1,0),
                   # all GECO participants read the same text
@@ -122,6 +126,7 @@ geco_ia <- bind_rows(geco_ia_l1, geco_ia_l2) %>%
 geco_ia_long <- gather(geco_ia, "fix_measure", "RT", 
                     c('FIRST_FIXATION', 'GAZE_DURATION', 'TOTAL_FIXATION', 'SKIP', 'FIXATION_COUNT'), factor_key = TRUE) 
 ```
+
 
 Load CELER Interest area report
 ```{r}
@@ -155,7 +160,9 @@ celer_ia <- celer_ia %>%
                         SURPRISAL_prev1 = lag(SURPRISAL),
                         FREQUENCY_prev1 = lag(FREQUENCY),
                         WORD_LEN_prev1 = lag(WORD_LEN),
-                        OOV_prev1 = lag(OOV)) %>%
+                        OOV_prev1 = lag(OOV),
+                        WORD_NORM_prev1 = lag(WORD_NORM),
+                        WORD_ID_prev1 = lag(WORD_ID)) %>%
                 # add L1 and proficiency information form metadata
                  mutate(MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
                         L1 = unlist(map(SUBJECT, function(x){celer_metadata[toString(x),"L1"]})),
@@ -202,6 +209,8 @@ celer_fix <- celer_fix %>%
                          FREQUENCY_prev1 = lag(FREQUENCY),
                          WORD_LEN_prev1 = lag(WORD_LEN),
                          OOV_prev1 = lag(OOV),
+                         WORD_NORM_prev1 = lag(WORD_NORM),
+                         WORD_ID_prev1 = lag(WORD_ID),
                          REGRESSION = ifelse(NEXT_SAC_DIRECTION == "LEFT", 1, 0)) %>%
                   # add L1 and proficiency information form metadata
                   mutate(MPT = map_dbl(SUBJECT, function(x){celer_metadata[toString(x),"MichiganLG"]}),
@@ -227,6 +236,7 @@ filter_words <- function(df){
   return(df_filtered)
 }
 
+
 center_predictors <- function(df){
   df_centered <- df %>% mutate(FREQUENCY_c = FREQUENCY - mean(FREQUENCY), 
                                SURPRISAL_c = SURPRISAL - mean(SURPRISAL), 
@@ -244,6 +254,114 @@ geco_ia_oov <- geco_ia %>% filter_words %>% center_predictors
 geco_ia_oov_long <- gather(geco_ia_oov, "fix_measure", "RT", 
                         c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION"))
 ```
+
+Table 3: the effects of frequency, surprisal and word length on reading times (First Fixation, Gaze Duration, Total fixation)
+
+Mixed Effects models in Julia
+```{r}
+run_mixed_effects_julia <- function(report, mx_formula){
+    julia_assign("report", report)
+    julia_assign("formula", formula(mx_formula))
+    result <- julia_eval("fit(LinearMixedModel, formula, report)")
+    return(result)
+}
+```
+
+Frequency, Suprisal and Word length effects
+```{r}
+formula1 = "RT ~ FREQUENCY_c + FREQUENCY_prev1_c +
+                 SURPRISAL_c + SURPRISAL_prev1_c + 
+                 WORD_LEN_c + WORD_LEN_prev1_c + 
+                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)" # (SURPRISAL_c|WORD_NORM)
+formula2 = "RT ~ English_05*FREQUENCY_c + English_05*FREQUENCY_prev1_c + 
+                 English_05*SURPRISAL_c + English_05*SURPRISAL_prev1_c + 
+                 English_05*WORD_LEN_c + English_05*WORD_LEN_prev1_c + 
+                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)" # (English*SURPRISAL_c|WORD_NORM)
+```
+
+GECO by English
+```{r}
+for (L in c("L1", "L2")){ 
+    for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(L)
+      print(measure)
+      cat("GECO\n")
+      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure, English == L), formula1))
+      cat("\n")
+    }
+}
+```
+
+GECO Compare L1 and L2
+```{r}
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+    print(measure)
+    cat("CELER\n")
+    print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula2))
+    cat("\n")
+}
+```
+
+CELER by English
+```{r}
+
+for (L in c("L1", "L2")){
+    for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(L)
+      print(measure)
+        cat("CELER\n")
+        print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure, English == L), formula1))
+        cat("\n")
+    }
+}
+```
+
+CELER Compare L1 and L2
+```{r}
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(measure)
+      cat("GECO\n")
+      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula2))
+      cat("\n")
+    }
+```
+
+Compare CELER and GECO
+```{r}
+report_all = bind_rows(geco_ia_oov_long, celer_ia_oov_long)
+
+      formula3 = "RT ~ DATASET_05*English_05*FREQUENCY_c + DATASET_05*English_05*FREQUENCY_prev1_c + 
+                       DATASET_05*English_05*SURPRISAL_c + DATASET_05*English_05*SURPRISAL_prev1_c + 
+                       DATASET_05*English_05*WORD_LEN_c + DATASET_05*English_05*WORD_LEN_prev1_c + 
+                       (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
+      formula4 = "RT ~ DATASET_05*FREQUENCY_c + DATASET_05*FREQUENCY_prev1_c + 
+                       DATASET_05*SURPRISAL_c + DATASET_05*SURPRISAL_prev1_c + 
+                       DATASET_05*WORD_LEN_c + DATASET_05*WORD_LEN_prev1_c + 
+                       (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
+
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(measure)
+      #cat("CELER vs GECO\n")
+      #print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
+      #cat("\n")
+      cat("CELER vs GECO L1\n")
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L1"), formula4))
+      cat("\n")
+      print(measure)
+      cat("CELER vs GECO L2\n")
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L2"), formula4))
+      cat("\n")
+}
+      
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(measure)
+      cat("CELER vs GECO\n")
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
+      cat("\n")
+}
+```
+
+
 
 Table 2: Benchmarks for standard fixation measures for L1 and L2 on CELER and GECO
 ```{r}
@@ -346,65 +464,9 @@ summary(m_velocity)$coefficients
 ```
 
 
-Table 3: the effects of frequency, surprisal and word length on reading times (First Fixation, Gaze Duration, Total fixation)
+========END=======
 
-Mixed Effects models in Julia
-```{r}
-run_mixed_effects_julia <- function(report, mx_formula){
-    julia_assign("report", report)
-    julia_assign("formula", formula(mx_formula))
-    result <- julia_eval("fit(LinearMixedModel, formula, report)")
-    return(result)
-}
-```
-
-
-```{r}
-report_all = bind_rows(geco_ia_oov_long, celer_ia_oov_long)
-for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-      print(measure)
-      formula1 = "RT ~ English/FREQUENCY_c + English/FREQUENCY_prev1_c + 
-                       English/SURPRISAL_c + English/SURPRISAL_prev1_c +
-                       English/WORD_LEN_c + English/WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c| SUBJECT)"# +(SURPRISAL_c|WORD_NORM)"
-      formula2 = "RT ~ English_05*FREQUENCY_c + English_05*FREQUENCY_prev1_c + 
-                       English_05*SURPRISAL_c + English_05*SURPRISAL_prev1_c + 
-                       English_05*WORD_LEN_c + English_05*WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"# +(SURPRISAL_c|WORD_NORM)"
-      formula3 = "RT ~ DATASET_05*English_05*FREQUENCY_c + DATASET_05*English_05*FREQUENCY_prev1_c + 
-                       DATASET_05*English_05*SURPRISAL_c + DATASET_05*English_05*SURPRISAL_prev1_c + 
-                       DATASET_05*English_05*WORD_LEN_c + DATASET_05*English_05*WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"
-      formula4 = "RT ~ DATASET_05*FREQUENCY_c + DATASET_05*FREQUENCY_prev1_c + 
-                       DATASET_05*SURPRISAL_c + DATASET_05*SURPRISAL_prev1_c + 
-                       DATASET_05*WORD_LEN_c + DATASET_05*WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + FREQUENCY_prev1_c + SURPRISAL_prev1_c + WORD_LEN_prev1_c | SUBJECT)"
-      
-      cat("CELER\n")
-      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula1))
-      cat("\n")
-      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula2))
-      cat("\n")
-      cat("GECO\n")
-      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula1))
-      cat("\n")
-      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula2))
-      cat("\n")
-      cat("CELER vs GECO\n")
-      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
-      cat("\n")
-      cat("CELER vs GECO L1\n")
-      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L1"), formula4))
-      cat("\n")
-      cat("CELER vs GECO L2\n")
-      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L2"), formula4))
-      cat("\n")
-}
-```
-
-
-
-Obtain random effects for separately for L1 and L2 in CELER and GECO
+OTHER: Obtain random effects for separately for L1 and L2 in CELER and GECO
 
 ```{r, fig.height=6,fig.width=8}
 

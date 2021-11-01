@@ -1,4 +1,4 @@
-Analyses for the paper: "A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading"
+Analyses for the paper: "CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading"
 
 Before running this script please obtain the data as follows:
 
@@ -42,7 +42,7 @@ OOV_GECO = "OOV_SUBTLEX"
 SURP_GECO = "SURP_GPT2"
 ```
 
-Load CELER and GECO metadata and Plot basic participant stats
+Load CELER and GECO metadata and Plot basic participant stats (Figure 1)
 ```{r,fig.width=12,fig.height=4}
 geco_metadata = read_xlsx("geco/SubjectInformation.xlsx", na = c("", ".")) %>% rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
                         L1 = as.factor(ifelse(GROUP == "bilingual", "Dutch", "English")),
@@ -255,111 +255,6 @@ geco_ia_oov_long <- gather(geco_ia_oov, "fix_measure", "RT",
                         c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION"))
 ```
 
-Table 3: the effects of frequency, surprisal and word length on reading times (First Fixation, Gaze Duration, Total fixation)
-
-Mixed Effects models in Julia
-```{r}
-run_mixed_effects_julia <- function(report, mx_formula){
-    julia_assign("report", report)
-    julia_assign("formula", formula(mx_formula))
-    result <- julia_eval("fit(LinearMixedModel, formula, report)")
-    return(result)
-}
-```
-
-Frequency, Suprisal and Word length effects
-```{r}
-formula1 = "RT ~ FREQUENCY_c + FREQUENCY_prev1_c +
-                 SURPRISAL_c + SURPRISAL_prev1_c + 
-                 WORD_LEN_c + WORD_LEN_prev1_c + 
-                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)" # (SURPRISAL_c|WORD_NORM)
-formula2 = "RT ~ English_05*FREQUENCY_c + English_05*FREQUENCY_prev1_c + 
-                 English_05*SURPRISAL_c + English_05*SURPRISAL_prev1_c + 
-                 English_05*WORD_LEN_c + English_05*WORD_LEN_prev1_c + 
-                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)" # (English*SURPRISAL_c|WORD_NORM)
-```
-
-GECO by English
-```{r}
-for (L in c("L1", "L2")){ 
-    for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-      print(L)
-      print(measure)
-      cat("GECO\n")
-      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure, English == L), formula1))
-      cat("\n")
-    }
-}
-```
-
-GECO Compare L1 and L2
-```{r}
-for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-    print(measure)
-    cat("CELER\n")
-    print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula2))
-    cat("\n")
-}
-```
-
-CELER by English
-```{r}
-
-for (L in c("L1", "L2")){
-    for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-      print(L)
-      print(measure)
-        cat("CELER\n")
-        print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure, English == L), formula1))
-        cat("\n")
-    }
-}
-```
-
-CELER Compare L1 and L2
-```{r}
-for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-      print(measure)
-      cat("GECO\n")
-      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula2))
-      cat("\n")
-    }
-```
-
-Compare CELER and GECO
-```{r}
-report_all = bind_rows(geco_ia_oov_long, celer_ia_oov_long)
-
-      formula3 = "RT ~ DATASET_05*English_05*FREQUENCY_c + DATASET_05*English_05*FREQUENCY_prev1_c + 
-                       DATASET_05*English_05*SURPRISAL_c + DATASET_05*English_05*SURPRISAL_prev1_c + 
-                       DATASET_05*English_05*WORD_LEN_c + DATASET_05*English_05*WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
-      formula4 = "RT ~ DATASET_05*FREQUENCY_c + DATASET_05*FREQUENCY_prev1_c + 
-                       DATASET_05*SURPRISAL_c + DATASET_05*SURPRISAL_prev1_c + 
-                       DATASET_05*WORD_LEN_c + DATASET_05*WORD_LEN_prev1_c + 
-                       (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
-
-for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-      print(measure)
-      #cat("CELER vs GECO\n")
-      #print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
-      #cat("\n")
-      cat("CELER vs GECO L1\n")
-      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L1"), formula4))
-      cat("\n")
-      print(measure)
-      cat("CELER vs GECO L2\n")
-      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L2"), formula4))
-      cat("\n")
-}
-      
-for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
-      print(measure)
-      cat("CELER vs GECO\n")
-      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula3))
-      cat("\n")
-}
-```
 
 
 
@@ -463,72 +358,102 @@ m_velocity <- lmer(NEXT_SAC_AVG_VELOCITY ~ English_05*NEXT_SAC_AMPLITUDE_c + (1 
 summary(m_velocity)$coefficients
 ```
 
+Table 3: the effects of frequency, surprisal and word length on reading times (First Fixation, Gaze Duration, Total fixation)
 
-========END=======
-
-OTHER: Obtain random effects for separately for L1 and L2 in CELER and GECO
-
-```{r, fig.height=6,fig.width=8}
-
-get_random_effects_julia <- function(dataset, normalize = TRUE){
-  print(paste(unique(dataset$DATASET), unique(dataset$English), unique(dataset$fix_measure)))
-  mx_formula <- "RT ~ FREQUENCY_c + SURPRISAL_c + WORD_LEN_c + (FREQUENCY_c + SURPRISAL_c + WORD_LEN_c | SUBJECT)"
-  julia_assign("dataset", dataset)
-  julia_assign("formula", formula(mx_formula))
-  julia_eval("m = fit(LinearMixedModel, formula, dataset)")
-  rand = t(julia_eval("ranef(m)")[1])
-  colnames(rand) <- c("Intercept", "FREQUENCY", "SURPRISAL", "WORD_LEN")
-  fixed = t(julia_eval("coef(m)"))
-  colnames(fixed) <- c("Intercept", "FREQUENCY", "SURPRISAL", "WORD_LEN")
-  if (normalize == TRUE){
-    rand = sweep(rand, 2, fixed, "/") #divide random effects by fixed effects
-  }
-  rand = data.frame(rand)
-  rand <- gather(rand, "coef", "SUBJECT_COEFFICIENT", c("FREQUENCY", "SURPRISAL","WORD_LEN"))
-  return(rand)
+Mixed Effects models in Julia
+```{r}
+run_mixed_effects_julia <- function(report, mx_formula){
+    julia_assign("report", report)
+    julia_assign("formula", formula(mx_formula))
+    result <- julia_eval("fit(LinearMixedModel, formula, report)")
+    return(result)
 }
+```
 
-get_subject_effects <- function(dataset, normalize = TRUE){
-    #Fit a separate model for each subject
-    print(paste(unique(dataset$DATASET), unique(dataset$English), unique(dataset$fix_measure)))
-    m = lmList(RT ~ FREQUENCY_c + SURPRISAL_c + WORD_LEN_c | SUBJECT, data = dataset)
-    coefs = coef(m) #%>% rownames_to_column("SUBJECT")
-    colnames(coefs) <- c("Intercept", "FREQUENCY", "SURPRISAL", "WORD_LEN")
-    means = colMeans(coefs)
-    coefs = sweep(coefs, 2, means, "-")
-    if (normalize == TRUE){
-      print("normalizing....")
-      coefs = sweep(coefs, 2, means, "/")
+Frequency, Suprisal and Word length effects
+```{r}
+formula1 = "RT ~ FREQUENCY_c + FREQUENCY_prev1_c +
+                 SURPRISAL_c + SURPRISAL_prev1_c + 
+                 WORD_LEN_c + WORD_LEN_prev1_c + 
+                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
+formula2 = "RT ~ English_05*FREQUENCY_c + English_05*FREQUENCY_prev1_c + 
+                 English_05*SURPRISAL_c + English_05*SURPRISAL_prev1_c + 
+                 English_05*WORD_LEN_c + English_05*WORD_LEN_prev1_c + 
+                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)" 
+```
+
+GECO by English
+```{r}
+for (L in c("L1", "L2")){ 
+    for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(L)
+      print(measure)
+      cat("GECO\n")
+      print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure, English == L), formula1))
+      cat("\n")
     }
-    coefs_long <- gather(coefs, "coef", "SUBJECT_COEFFICIENT", c("FREQUENCY", "SURPRISAL","WORD_LEN"))
-    return(coefs_long)
-}
-
-plot_coefs <- function(data, bars, test){
-  p <- ggplot() +
-      theme_bw(base_size = 25) +
-      geom_point(data = data, aes(x = coef, y = SUBJECT_COEFFICIENT, fill = DATASET), 
-              pch = 21, position = position_jitterdodge(dodge.width = 1), alpha = 0.05, size = 4) + 
-      #geom_boxplot(data = data, aes(x = coef, SUBJECT_COEFFICIENT, fill = DATASET), width = 0.4, outlier.size = 0) +
-      geom_errorbar(data = bars, aes(x = coef, ymin = 0-std/2, ymax = 0+std/2, width = 0.3,   color = DATASET), size = 1, position = "dodge") +
-      geom_text(data = test, aes(x = coef, y = Inf, label=stars), vjust=1, size = 8, color = "black") +
-      facet_wrap(English ~ fix_measure, scales = "free") + theme(aspect.ratio = 0.75) +
-      theme(axis.title.x=element_blank())
-  return(p)
 }
 ```
 
-```{r,fig.height=6,fig.width=8}
-normalization = TRUE
-
-#subject_coefs <- bind_rows(geco_ia_oov_long, celer_ia_oov_long) %>% group_by(DATASET, English, fix_measure) %>% do(get_subject_effects(., normalize=normalize_coefs)) %>% ungroup()
-subject_ranefs <- bind_rows(geco_ia_oov_long, celer_ia_oov_long) %>% group_by(DATASET, English, fix_measure) %>% do(get_random_effects_julia(., normalize=normalization)) %>% ungroup()
-bars <- subject_ranefs %>% group_by(DATASET, English, fix_measure, coef) %>% summarise(std = sd(SUBJECT_COEFFICIENT)) %>% ungroup()
-test <- subject_ranefs %>% group_by(English, fix_measure, coef) %>% 
-                           summarise(levene = leveneTest(SUBJECT_COEFFICIENT ~ DATASET, center = mean)$`Pr(>F)`[1]) %>%  
-                           mutate(stars = symnum(levene, corr = FALSE, na = FALSE, cutpoints = c(0,0.001,0.01,0.05,1), symbols = c("***","**","*","(.)")))
-p_ranefs <- plot_coefs(subject_ranefs, bars, test)
-ggsave(file=paste("dataset_analyses_figures/coefs-rand-norm_",normalization,".pdf", sep=""), height=18,width=24, p_ranefs)
-
-print(p_ranefs)
+GECO Compare L1 and L2
+```{r}
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+    print(measure)
+    cat("CELER\n")
+    print(run_mixed_effects_julia(filter(geco_ia_oov_long, fix_measure == measure), formula2))
+    cat("\n")
+}
 ```
+
+CELER by English
+```{r}
+
+for (L in c("L1", "L2")){
+    for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(L)
+      print(measure)
+        cat("CELER\n")
+        print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure, English == L), formula1))
+        cat("\n")
+    }
+}
+```
+
+CELER Compare L1 and L2
+```{r}
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(measure)
+      cat("GECO\n")
+      print(run_mixed_effects_julia(filter(celer_ia_oov_long, fix_measure == measure), formula2))
+      cat("\n")
+    }
+```
+
+Compare CELER and GECO
+```{r}
+report_all = bind_rows(geco_ia_oov_long, celer_ia_oov_long)
+
+formula3 = "RT ~ DATASET_05*FREQUENCY_c + DATASET_05*FREQUENCY_prev1_c + 
+                 DATASET_05*SURPRISAL_c + DATASET_05*SURPRISAL_prev1_c + 
+                 DATASET_05*WORD_LEN_c + DATASET_05*WORD_LEN_prev1_c + 
+                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
+formula4 = "RT ~ DATASET_05*English_05*FREQUENCY_c + DATASET_05*English_05*FREQUENCY_prev1_c + 
+                 DATASET_05*English_05*SURPRISAL_c + DATASET_05*English_05*SURPRISAL_prev1_c + 
+                 DATASET_05*English_05*WORD_LEN_c + DATASET_05*English_05*WORD_LEN_prev1_c + 
+                 (FREQUENCY_c + FREQUENCY_prev1_c + SURPRISAL_c + SURPRISAL_prev1_c + WORD_LEN_c + WORD_LEN_prev1_c | SUBJECT)"
+
+for (measure in c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION")){
+      print(measure)
+      cat("CELER vs GECO L1\n")
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L1"), formula3))
+      cat("\n")
+      print(measure)
+      cat("CELER vs GECO L2\n")
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure, English =="L2"), formula3))
+      cat("\n")
+      cat("CELER vs GECO\n")
+      print(run_mixed_effects_julia(filter(report_all, fix_measure == measure), formula4))
+      cat("\n")
+}
+```
+========END=======

@@ -1,4 +1,4 @@
-Analyses for the paper: "CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading"
+Analyses for "CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading", Berzak et al., Open Mind (2022).
 
 Before running this script please obtain the data as follows:
 
@@ -12,9 +12,11 @@ GECO:
 Download GECO augmented with frequency and surprisal values from the following url and place `geco/` at the top level of this directory
 https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing
 
-The script uses Julia MixedModels library. Install Julia here https://julialang.org/downloads/, then open Julia and install the required libraries RCall and MixedModels:
-Pkg.add("RCall")
-Pkg.add("MixedModels")
+The script uses Julia MixedModels library. 
+Install Julia here https://julialang.org/downloads/. 
+Then open Julia and install the required libraries RCall and MixedModels:
+`Pkg.add("RCall")`
+`Pkg.add("MixedModels")`
 
 ```{r}
 set.seed(214)
@@ -25,13 +27,12 @@ library(lmerTest)
 library(readxl)
 library(rjson)
 library(lattice)
-library(car) #for Levene test
+library(car)
 library(JuliaCall)
 
 j<-julia_setup()
 j$library("MixedModels")
 
-#Settings for frequency and surprisal. Frequency FREQ_SUBTLEX / FREQ_BLLIP / FREQ_WEB. Surprisal SURP_GPT2 / SURP_LSTM / SURP_KENLM. For GECO, only GPT2 is currently available.
 #CELER
 FREQ_CELER = "FREQ_SUBTLEX"
 OOV_CELER = "OOV_SUBTLEX"
@@ -44,9 +45,12 @@ SURP_GECO = "SURP_GPT2"
 
 Load CELER and GECO metadata and Plot basic participant stats (Figure 1)
 ```{r,fig.width=12,fig.height=4}
-geco_metadata = read_xlsx("geco/SubjectInformation.xlsx", na = c("", ".")) %>% rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
-                        L1 = as.factor(ifelse(GROUP == "bilingual", "Dutch", "English")),
-                        DATASET = "GECO")
+
+geco_metadata = read_xlsx("geco/SubjectInformation.xlsx", na = c("", ".")) %>% 
+                rename("Age" = "AGE", "English.AoA" =  "AOA_ENG") %>% 
+                mutate(English = ifelse(GROUP == "bilingual", "L2", "L1"),
+                       L1 = as.factor(ifelse(GROUP == "bilingual", "Dutch", "English")),
+                       DATASET = "GECO")
 
 celer_metadata = read.table("participant_metadata/metadata.tsv", header = TRUE, quote = "", sep = "\t") %>% 
                         mutate(English = ifelse(L1 == "English", "L1", "L2"),
@@ -55,7 +59,6 @@ celer_metadata = read.table("participant_metadata/metadata.tsv", header = TRUE, 
 
 metadata_all = bind_rows(geco_metadata, celer_metadata) %>% mutate_at(c("English", "L1", "DATASET"), as.factor)
 metadata_long = gather(metadata_all, "property", "x", c("Age", "English.AoA",  "MichiganLG"), factor_key = TRUE)
-
 
 property.labs = c("Age", "English Age of Acquisition", "MichiganLG")
 names(property.labs) = c("Age", "English.AoA", "MichiganLG")
@@ -221,7 +224,6 @@ celer_fix <- celer_fix %>%
 celer_fix_long <- gather(celer_fix, "fix_measure", "RT", 
                          c("CURRENT_FIX_DURATION", "NEXT_SAC_AMPLITUDE", "NEXT_SAC_AVG_VELOCITY", "REGRESSION"), factor_key = TRUE) 
 ```
-TODO?: can also filter NEXT_FIX_INTEREST_AREA_ID != '.' to exclude saccades that go outside the text region
 
 Preprocess data
 ```{r}
@@ -232,10 +234,8 @@ filter_words <- function(df){
                                    !grepl('^[[:punct:]]|[[:punct:]]$', WORD), #words with punctuation
                                    OOV == 0, OOV_prev1 == 0, #out of vocabulary words
                                    !is.na(TOTAL_FIXATION)) #skips
-
   return(df_filtered)
 }
-
 
 center_predictors <- function(df){
   df_centered <- df %>% mutate(FREQUENCY_c = FREQUENCY - mean(FREQUENCY), 
@@ -254,8 +254,6 @@ geco_ia_oov <- geco_ia %>% filter_words %>% center_predictors
 geco_ia_oov_long <- gather(geco_ia_oov, "fix_measure", "RT", 
                         c("FIRST_FIXATION", "GAZE_DURATION", "TOTAL_FIXATION"))
 ```
-
-
 
 
 Table 2: Benchmarks for standard fixation measures for L1 and L2 on CELER and GECO
@@ -351,12 +349,6 @@ means_celer_fix %>% mutate_if(is.numeric, round, digits=2)
 tests_celer_fix %>% mutate_if(is.numeric, round, digits=2)
 ```
 
-```{r}
-celer_fix <- celer_fix %>% mutate(NEXT_SAC_AMPLITUDE_c = NEXT_SAC_AMPLITUDE - mean(NEXT_SAC_AMPLITUDE))
-m_velocity <- lmer(NEXT_SAC_AVG_VELOCITY ~ English_05*NEXT_SAC_AMPLITUDE_c + (1 |SUBJECT), 
-                   control=lmerControl(optimizer = "bobyqa", calc.derivs = FALSE), data=celer_fix)
-summary(m_velocity)$coefficients
-```
 
 Table 3: the effects of frequency, surprisal and word length on reading times (First Fixation, Gaze Duration, Total fixation)
 

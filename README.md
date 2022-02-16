@@ -1,4 +1,4 @@
-# CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading
+# CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading
 
 Eye movement recordings of 69 native English speakers and 296 English learners reading Wall Street Journal (WSJ) newswire sentences. Each participant reads 156 sentences: 78 sentences shared across participants and 78 unique to each participant.
 
@@ -26,8 +26,7 @@ The eyetracking data is not made directly available due to licensing restictions
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
 2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`. 
    - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
-3. Run `python obtain_data.py`. This will download a zipped `data_[version]/` data folder. Extract to the top level of this directory. By default, the script will download v2.0 of the data. To obtain v1.0 run `python obtain_data.py --release v1.0`
-
+3. Run `python obtain_data.py`. This will download a zipped `data_[version]/` data folder. Extract to the top level of this directory.
 
 <a name="statistics">
 
@@ -60,9 +59,10 @@ SR DataViewer Interest Area and Fixation Reports, and syntactic annotations.
 - `metadata.tsv` metadata on participants.
 - `languages.tsv` information on languages spoken besides English.
 - `test_scores/`
-    - `test_conversion.tsv` unofficial conversion table between standardized proficiency tests (used to convert TOEIC to TOEFL scores).  
-    - `michigan/` Item level responses for the Michigan Placement Test (MPT).   
-    - `comprehension/` Item level responses for the reading comprehension during the eyetracking experiment.  
+    - `test_conversion.tsv` unofficial conversion table between standardized proficiency tests (used to convert TOEIC to TOEFL scores).
+    - `michigan-cefr.tsv` conversion table between form B and the newer forms D/E/F, as well as to CEFR levels.
+    - `michigan/` item level responses for the Michigan Placement Test (MPT).   
+    - `comprehension/` item level responses for the reading comprehension during the eyetracking experiment.  
 
 **`splits/`**
 
@@ -81,7 +81,7 @@ Trial and participant splits.
 
 **`dataset_analyses.Rmd`**
 
-Analyses for the paper "CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading".
+Analyses for the paper "CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading".
 Note that this script requires:
 - CELER (in the folder `data_[version]/`) and, 
 - GECO Augmented (in the folder `geco/`). Download [GECO augmented](https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing) with frequency and surprisal values and place `geco/` at the top level of this directory.
@@ -101,8 +101,6 @@ Note that this script requires:
 <a name="cite">
 
 ## Citation
-
-CELER: A 365 Participants Corpus of Eye Movements in L1 and L2 English Reading
 
 TODO: Add citation
 

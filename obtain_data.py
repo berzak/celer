@@ -15,10 +15,10 @@ def check_readme():
     codes = {"PTB": 0, "BLLIP": 0}
     for dataset in NEWS_DATASETS:
         try:
-            codes[dataset] = os.stat(NEWS_READMES_DIR+"/"+dataset+"/"+NEWS_DATASETS[dataset]["README"]).st_size
+            codes[dataset] = os.stat(NEWS_READMES_DIR+"/"+NEWS_DATASETS[dataset]["README"]).st_size
         except OSError:
             print("Error:", dataset, NEWS_DATASETS[dataset]["README"], "file is missing.", 
-            "Please download the dataset from", NEWS_DATASETS[dataset]['url'], "and copy this file to the", NEWS_READMES_DIR+'/'+dataset, "directory")
+            "Please download the dataset from", NEWS_DATASETS[dataset]['url'], "and copy this file to the", NEWS_READMES_DIR, "directory")
     return codes.values()
 
 def obtain_data(data_file, codes):

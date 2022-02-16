@@ -26,7 +26,7 @@ The eyetracking data is not made directly available due to licensing restictions
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
 2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`. 
    - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
-3. Run `python obtain_data.py`. This will download a zipped `data_[version]/` data folder. Extract to the top level of this directory.
+3. Run `python obtain_data.py`. This will download a zipped `data_v2.0/` data folder. Extract to the top level of this directory.
 
 <a name="statistics">
 
@@ -83,7 +83,7 @@ Trial and participant splits.
 
 Analyses for the paper "CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading".
 Note that this script requires:
-- CELER (in the folder `data_[version]/`) and, 
+- CELER (in the folder `data_v2.0/`) and, 
 - GECO Augmented (in the folder `geco/`). Download [GECO augmented](https://drive.google.com/file/d/1T4qgbwPkdzYmTvIqMUGJlvY-v22Ifinx/view?usp=sharing) with frequency and surprisal values and place `geco/` at the top level of this directory.
 
 ## Documentation

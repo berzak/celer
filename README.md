@@ -102,7 +102,14 @@ Note that this script requires:
 
 ## Citation
 
-TODO: Add citation
+```
+@article{celer2022,  
+      author    = {Berzak, Yevgeni and Nakamura, Chie and Smith, Amelia and Weng, Emily and Katz, Boris and Flynn, Suzanne and Levy, Roger},  
+      title     = {CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading},  
+      journal = {Open Mind},
+      year      = {2022}
+      }
+```
 
 
 ## License

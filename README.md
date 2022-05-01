@@ -103,14 +103,19 @@ Note that this script requires:
 ## Citation
 
 ```
-@article{celer2022,  
-      author    = {Berzak, Yevgeni and Nakamura, Chie and Smith, Amelia and Weng, Emily and Katz, Boris and Flynn, Suzanne and Levy, Roger},  
-      title     = {CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading},  
-      journal = {Open Mind},
-      year      = {2022}
-      }
+@article{celer2022,
+    author = {Berzak, Yevgeni and Nakamura, Chie and Smith, Amelia and Weng, Emily and Katz, Boris and Flynn, Suzanne and Levy, Roger},
+    title = "{CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading}",
+    journal = {Open Mind},
+    pages = {1-10},
+    year = {2022},
+    month = {04},
+    issn = {2470-2986},
+    doi = {10.1162/opmi_a_00054},
+    url = {https://doi.org/10.1162/opmi\_a\_00054},
+    eprint = {https://direct.mit.edu/opmi/article-pdf/doi/10.1162/opmi\_a\_00054/2012324/opmi\_a\_00054.pdf},
+}
 ```
-
 
 ## License
 <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a><br />This work, with the exception of the underlying PTB-WSJ and BLLIP texts, is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.

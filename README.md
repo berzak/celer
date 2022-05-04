@@ -24,8 +24,8 @@ Eye movement recordings of 69 native English speakers and 296 English learners r
 The eyetracking data is not made directly available due to licensing restictions of the Penn Treebank (PTB) and the BLLIP datasets from which the reading materials are drawn. In order to obtain the data with the underlying texts please follow these instructions (require Python 3).
 
 1. Obtain the [PTB-WSJ](https://catalog.ldc.upenn.edu/LDC95T7) and [BLLIP](https://catalog.ldc.upenn.edu/LDC2000T43) corpora through LDC.
-2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/PTB/`. 
-   - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/BLLIP/`
+2. - Copy the `README` file of the PTB-WSJ (starts with "This is the Penn Treebank Project: Release 2 ...") to the folder `ptb_bllip_readmes/`. 
+   - Copy the `README.1st` file of BLLIP (starts with "File:  README.1st ...") to the folder `ptb_bllip_readmes/`.
 3. Run `python obtain_data.py`. This will download a zipped `data_v2.0/` data folder. Extract to the top level of this directory.
 
 <a name="statistics">
@@ -101,7 +101,8 @@ Note that this script requires:
 <a name="cite">
 
 ## Citation
-
+Paper: [CELER: A 365-Participant Corpus of Eye Movements in L1 and L2 English Reading](https://direct.mit.edu/opmi/article/doi/10.1162/opmi_a_00054/110717/CELER-A-365-Participant-Corpus-of-Eye-Movements-in)
+   
 ```
 @article{celer2022,
     author = {Berzak, Yevgeni and Nakamura, Chie and Smith, Amelia and Weng, Emily and Katz, Boris and Flynn, Suzanne and Levy, Roger},
